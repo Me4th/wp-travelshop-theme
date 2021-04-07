@@ -109,35 +109,35 @@
                 </form>
             </div>
             <div class="col-auto align-self-center  dropdown">
+                <?php $wishlist = json_decode($_COOKIE["wishlistObjects"]); ?>
                 <button class="toggler wishlist-toggler" type="button" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="#607D8B" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z"/>
                         <path d="M12 20l-7 -7a4 4 0 0 1 6.5 -6a.9 .9 0 0 0 1 0a4 4 0 0 1 6.5 6l-7 7" />
                     </svg>
-                    <span class="count">3</span>
+                    <span class="count"><?php echo count($wishlist); ?></span>
                 </button>
 
                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-wishlist">
                     <div class="wishlist-items">
-                        <div class="wishlist-item">
-                            <span class="name"><a href="#">Reise #1</a></span>
-                            <button class="wishlist-delete" type="button">
-                                <i class="la la-times"></i>
-                            </button>
-                        </div>
-                        <div class="wishlist-item">
-                            <span class="name"><a href="#">Reise #1</a></span>
-                            <button class="wishlist-delete" type="button">
-                                <i class="la la-times"></i>
-                            </button>
-                        </div>
-                        <div class="wishlist-item">
-                            <span class="name"><a href="#">Reise #1</a></span>
-                            <button class="wishlist-delete" type="button">
-                                <i class="la la-times"></i>
-                            </button>
-                        </div>
+                        <?php 
+                            if($wishlist) {
+                                foreach($wishlist as $key => $item) {
+                                    $mediaObject = new Pressmind\ORM\Object\MediaObject($item); ?>
+                                    <div class="wishlist-item">
+                                        <span class="name"><a href="<?php echo $mediaObject->getPrettyUrl(); ?>"><?php echo $mediaObject->name; ?></a></span>
+                                        <div data-object-id="<?php echo $mediaObject->id; ?>" class="wishlist-delete">
+                                            <svg viewbox="0 0 40 40">
+                                                <path style="stroke: #777; fill: transparent; stroke-width: 5;" class="close-x" d="M 10,10 L 30,30 M 30,10 L 10,30" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                <?php }
+                            } else {
+                                echo 'Sie haben keine Reisen auf der Merkliste';
+                            }
+                        ?>
                     </div>
 
                     <div class="wishlist-actions">

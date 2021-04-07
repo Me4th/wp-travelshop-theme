@@ -189,8 +189,9 @@
         position: relative;
 
 
-        button.wishlist-delete {
+        div.wishlist-delete {
           @include resetbutton();
+          cursor: pointer;
           transition: all .3s;
           color: $body-color-light;
 
@@ -207,6 +208,10 @@
 
           &:hover {
             color: $body-color;
+          }
+
+          svg {
+            pointer-events: none;
           }
 
         }

@@ -280,7 +280,19 @@ $cheapest_price = $mo->getCheapestPrice($CheapestPriceFilter);
                                         <a href="#content-block-detail-booking">
                                             weitere Termine <i class="la la-angle-down"></i>
                                         </a>
-
+                                    </div>
+                                    <div class="detail-wishlist">
+                                        <a data-object-id="<?php echo $mo->id; ?>" class="add-to-wishlist" href="#">
+                                            <?php   $wishlist = json_decode($_COOKIE["wishlistObjects"]); 
+                                                    if($wishlist) {
+                                                        if(in_array($mo->id, $wishlist)) {
+                                                            echo 'von Merkliste löschen';
+                                                        } else {
+                                                            echo 'auf die Merkliste';
+                                                        }
+                                                    }
+                                            ?>
+                                        </a>
                                     </div>
                                     </p>
 
