@@ -70,22 +70,22 @@ if ( $('.detail-image-grid-holder').length > 0 ) {
 // -----------------------------------------------
 function setWishlistItem(id) {
   let cookies = Cookies.get('wishlistObjects');
-    if(typeof(cookies) != "undefined") {
-      cookieArray = JSON.parse(String(cookies));
-      if(!cookieArray.includes(parseInt(id))) {
-        cookieArray.push(parseInt(id));
-      } else {
-        const index = cookieArray.indexOf(parseInt(id));
-        if (index > -1) {
-          cookieArray.splice(index, 1);
-        }
-        console.log(cookieArray);
-      }
-      cookieArray = JSON.stringify(cookieArray);
+  if(typeof(cookies) != "undefined") {
+    cookieArray = JSON.parse(String(cookies));
+    if(!cookieArray.includes(parseInt(id))) {
+      cookieArray.push(parseInt(id));
     } else {
-      cookieArray = JSON.stringify([parseInt(id)]);
+      const index = cookieArray.indexOf(parseInt(id));
+      if (index > -1) {
+        cookieArray.splice(index, 1);
+      }
+      console.log(cookieArray);
     }
-    Cookies.set('wishlistObjects', cookieArray);
+    cookieArray = JSON.stringify(cookieArray);
+  } else {
+    cookieArray = JSON.stringify([parseInt(id)]);
+  }
+  Cookies.set('wishlistObjects', cookieArray);
 }
 
 $('.wishlist-delete').click(function(e) {

@@ -290,6 +290,8 @@ $cheapest_price = $mo->getCheapestPrice($CheapestPriceFilter);
                                                         } else {
                                                             echo 'auf die Merkliste';
                                                         }
+                                                    } else {
+                                                        echo 'auf die Merkliste';
                                                     }
                                             ?>
                                         </a>
