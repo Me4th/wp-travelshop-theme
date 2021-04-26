@@ -127,7 +127,7 @@
                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-wishlist">
                     <div class="wishlist-items">
                         <?php 
-                            if($wishlist) {
+                            if(isset($wishlist)) {
                                 foreach($wishlist as $key => $item) {
                                     $mediaObject = new Pressmind\ORM\Object\MediaObject($item); 
                                     $cheapestPrice = $mediaObject->getCheapestPrice();
