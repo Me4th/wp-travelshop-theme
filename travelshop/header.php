@@ -114,7 +114,7 @@
                 </form>
             </div>
             <div class="col-auto align-self-center dropdown dropdown-wishlist">
-                <?php $wishlist = json_decode($_COOKIE["wishlistObjects"]); ?>
+                <?php if($_COOKIE["wishlistObjects"]) { $wishlist = json_decode($_COOKIE["wishlistObjects"]); } ?>
                 <button class="toggler wishlist-toggler" type="button" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="#607D8B" fill="none" stroke-linecap="round" stroke-linejoin="round">
