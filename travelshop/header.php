@@ -18,6 +18,7 @@
             ?>
     </style>
     <?php wp_head(); ?>
+    <?php global $moc; ?>
 </head>
 <body>
 <header class="header-main">
@@ -112,13 +113,13 @@
                     </div>
                 </form>
             </div>
-            <div class="col-auto align-self-center  dropdown">
+            <div class="col-auto align-self-center dropdown dropdown-wishlist">
                 <?php $wishlist = json_decode($_COOKIE["wishlistObjects"]); ?>
                 <button class="toggler wishlist-toggler" type="button" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="#607D8B" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z"/>
-                        <path d="M12 20l-7 -7a4 4 0 0 1 6.5 -6a.9 .9 0 0 0 1 0a4 4 0 0 1 6.5 6l-7 7" />
+                        <path class="heart" d="M12 20l-7 -7a4 4 0 0 1 6.5 -6a.9 .9 0 0 0 1 0a4 4 0 0 1 6.5 6l-7 7" />
                     </svg>
                     <span class="count"><?= isset($wishlist) ? count($wishlist) : '0' ?></span>
                 </button>
@@ -128,15 +129,31 @@
                         <?php 
                             if($wishlist) {
                                 foreach($wishlist as $key => $item) {
-                                    $mediaObject = new Pressmind\ORM\Object\MediaObject($item); ?>
-                                    <div class="wishlist-item">
-                                        <span class="name"><a href="<?php echo $mediaObject->getPrettyUrl(); ?>"><?php echo $mediaObject->name; ?></a></span>
-                                        <div data-object-id="<?php echo $mediaObject->id; ?>" class="wishlist-delete">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                <line x1="18" y1="6" x2="6" y2="18" />
-                                                <line x1="6" y1="6" x2="18" y2="18" />
-                                            </svg>
+                                    $mediaObject = new Pressmind\ORM\Object\MediaObject($item); 
+                                    $cheapestPrice = $mediaObject->getCheapestPrice();
+                                    $data = new stdClass();
+                                    echo $mediaObject->render('renderMediaObjectData');
+                                    ?>
+                                    <div class="wishlist-item row">
+                                        <div class="wishlist-item__teaserimage col-3">
+                                            <a href="<?php echo $mediaObject->getPrettyUrl(); ?>">
+                                                <img src="<?php echo $moc->bilder_default[0]->getUri('teaser'); ?>" alt="<?php echo $moc->bilder_default[0]->alt; ?>" />
+                                            </a>
+                                        </div>
+                                        <div class="wishlist-item__content col-9">
+                                            <span class="wishlist-item__content__name"><a href="<?php echo $mediaObject->getPrettyUrl(); ?>"><?php echo $mediaObject->name; ?></a></span>
+                                            <?php if(isset($cheapestPrice->price_option)) { ?>
+                                                <div class="wishlist-item__content__price">
+                                                    <a href="<?php echo $mediaObject->getPrettyUrl(); ?>">ab <?php echo $cheapestPrice->price_option; ?> €</a>
+                                                </div>
+                                            <?php } ?>
+                                            <div data-object-id="<?php echo $mediaObject->id; ?>" class="wishlist-delete">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                    <line x1="18" y1="6" x2="6" y2="18" />
+                                                    <line x1="6" y1="6" x2="18" y2="18" />
+                                                </svg>
+                                            </div>
                                         </div>
                                     </div>
                                 <?php }

@@ -1,99 +1,150 @@
 // -- wishlist
-.toggler.wishlist-toggler {
-    position: relative;
-    padding-right: .75rem;
-
-    transition: all .3s;
-
-    &:hover {
-      color: $primary;
-    }
-
-    i {
-      font-size: 1.5rem; // 24px;
-    }
-
-    .count {
-      position: absolute;
-      top:0;
-      right:0;
-      font-size: .5rem; // 8px;
-      color: #fff;
-      width: 1.125rem; // 18px
-      height: 1.125rem; // 18px
-      border-radius: 9px;
-
-      display: block;
-      line-height: 1.125rem; // 18px
-      text-align: center;
-
-      background-color: $primary;
-    }
-}
-
-.dropdown-menu-wishlist {
-    padding: ( $grid-gutter-width / 3 ) * 2;
-    min-width: 15rem; // 240px, min width, to make it look nicer
-
-    .wishlist-items {
-      margin-bottom: $grid-gutter-width / 3;
-      margin-top: ( $grid-gutter-width / 3 ) * -1;
-
-      .wishlist-item {
-        padding-bottom: $grid-gutter-width / 3;
-        padding-top: $grid-gutter-width / 3;
+.dropdown-wishlist {
+    position: unset;
+    .toggler.wishlist-toggler {
         position: relative;
-
-
-        div.wishlist-delete {
-          @include resetbutton();
-          cursor: pointer;
-          transition: all .3s;
-          color: $body-color-light;
-
+        padding-right: .75rem;
+        transition: all .3s;
+    
+        &:hover {
+          color: $primary;
+        }
+    
+        i {
+          font-size: 1.5rem; // 24px;
+        }
+    
+        .count {
           position: absolute;
+          top:0;
           right:0;
-          top: 50%;
-          transform: translateY(-50%);
-
-          width: 1.5rem; // 24px;
-          height: 1.5rem; // 24px;
-
-          text-align: right;
-          line-height: 1.5rem; // 24px;
-
-          &:hover {
-            color: $body-color;
-          }
-
-          svg {
-            pointer-events: none;
-          }
-
+          font-size: .5rem; // 8px;
+          color: #fff;
+          width: 1.125rem; // 18px
+          height: 1.125rem; // 18px
+          border-radius: 9px;
+    
+          display: block;
+          line-height: 1.125rem; // 18px
+          text-align: center;
+    
+          background-color: $primary;
         }
+    }
+    
+    .dropdown-menu-wishlist {
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        padding: ( $grid-gutter-width / 3 ) * 2;
+        min-width: 100%;
+        border: 0;
+    
+        .wishlist-items {
+          margin-bottom: $grid-gutter-width / 3;
+          margin-top: ( $grid-gutter-width / 3 ) * -1;
+    
+            .wishlist-item {
+                padding-bottom: $grid-gutter-width / 3;
+                padding-top: $grid-gutter-width / 3;
+                position: relative;
+        
+                div.wishlist-delete {
+                    @include resetbutton();
+                    cursor: pointer;
+                    transition: all .3s;
+                    color: $body-color-light;
+            
+                    position: absolute;
+                    right: 1rem;
+                    top: 0;
+            
+                    width: 1.5rem; // 24px;
+                    height: 1.5rem; // 24px;
+            
+                    text-align: right;
+                    line-height: 1.5rem; // 24px;
+            
+                    &:hover {
+                        color: $body-color;
+                    }
+            
+                    svg {
+                        pointer-events: none;
+                    }
+        
+                }
+        
+                &__content__name > a {
+                    font-weight: 700;
+                    color: $body-color;
+        
+                    &:active, &:focus, &:hover {
+                        text-decoration: none;
+                    }
+            
+                    &:active, &:focus {
+                        color: $body-color;
+                    }
+            
+                    &:hover {
+                        color: $primary;
+                    }
+                }
+        
+                + .wishlist-item {
+                    border-top: 1px solid $gray-200;
+                }
 
-        span.name > a {
-          font-weight: 700;
-          color: $body-color;
-          transition: all .3s;
+                &__teaserimage {
+                    padding-right: 0;
+                    img {
+                        max-width: 100%;
+                        height: auto;
+                        margin: .25rem 0;
+                    }
+                }
 
-          &:active, &:focus, &:hover {
-            text-decoration: none;
-          }
+                &__content {
+                    padding-right: 3rem;
 
-          &:active, &:focus {
-            color: $body-color;
-          }
+                    &__price {
+                        a {
+                            color: #fff;
+                            background: #007bff;
+                            padding: .1rem .4rem;
+                            border-radius: 5px;
+                            display: inline-block;
+                            margin-top: .25rem;
 
-          &:hover {
-            color: $primary;
-          }
+                            &:hover {
+                                text-decoration: none;
+                                background: darken(#007bff, 10%);
+                            }
+                        }
+                    }
+                }
+            }
         }
-
-        + .wishlist-item {
-          border-top: 1px solid $gray-200;
+        @include media-breakpoint-down(sm) {
+            transform: none !important;
+            top: 68px !important;
+            right: 0;
         }
-
-      }
+        @include media-breakpoint-up(md) {
+            min-width: 25rem;
+            top: 15px !important;
+        }
+    }
+    &.show {
+        .toggler {
+            svg {
+                .heart {
+                    fill: #cccccc;
+                    stroke: #007bff;
+                }
+            }
+        }
+    }
+    @include media-breakpoint-up(md) {
+        position: relative;
     }
 }
