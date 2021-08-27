@@ -64,7 +64,6 @@ require_once 'functions/add_menu_meta.php';
 
 require_once 'functions/the_breadcrumb.php';
 require_once 'functions/theme_support.php';
-require_once 'functions/image-sizes.php';
 
 // Header
 require_once 'functions/http_header.php';
@@ -89,6 +88,10 @@ if(class_exists('WPCF7')){
 
 // Sitemaps
 require_once 'functions/sitemaps.php';
+
+// Images
+require_once 'functions/images.php';
+
 
 class PMTravelShop{
 
