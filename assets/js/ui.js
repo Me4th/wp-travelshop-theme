@@ -233,4 +233,46 @@ jQuery(function ($) {
 
         })
     }
+
+    /**
+     * this removes a current jquery violation:
+     * "Added non-passive event listener to a scroll-blocking 'touchstart' event. Consider marking event handler as 'passive' to make the page more responsive"
+     * https://stackoverflow.com/questions/46094912/added-non-passive-event-listener-to-a-scroll-blocking-touchstart-event
+     * @type {{setup: $.event.special.touchstart.setup}}
+     */
+    $.event.special.touchstart = {
+        setup: function (_, ns, handle) {
+            if ((ns.indexOf('noPreventDefault') > -1)) {
+                this.addEventListener("touchstart", handle, {passive: false});
+            } else {
+                this.addEventListener("touchstart", handle, {passive: true});
+            }
+        }
+    };
+
+    // --------------------------
+    // -- travel calendar
+    // --------------------------
+    if ( $('.product-calendar-group-item').length > 0 ) {
+        $('body').on('click', '.product-calendar-group-item', function(e) {
+            e.preventDefault();
+
+            var getId = $(this).data('product-item');
+            var isActive = $(this).hasClass('is--active');
+
+            if ( isActive ) {
+                $(this).removeClass('is--active');
+                $('.product-calendar-group-item--product[data-product-item="'+getId+'"]').removeClass('is--open');
+            } else {
+                $('.product-calendar-group-item').removeClass('is--active');
+                $('.product-calendar-group-item--product').removeClass('is--open');
+
+                $(this).addClass('is--active');
+                $('.product-calendar-group-item--product[data-product-item="'+getId+'"]').addClass('is--open');
+            }
+
+            e.stopPropagation();
+        })
+    }
+
 });
