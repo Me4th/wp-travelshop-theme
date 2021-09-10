@@ -46,11 +46,33 @@ if(MULTILANGUAGE_SITE === true){
  *          the theme supports only TS_TOUR_PRODUCTS at this moment
 
  */
-define('TS_TOUR_PRODUCTS', 607);
+define('TS_TOUR_PRODUCTS', null);
 define('TS_HOTEL_PRODUCTS', null);
 define('TS_HOLIDAYHOMES_PRODUCTS', null);
 define('TS_DAYTRIPS_PRODUCTS', null);
 define('TS_DESTINATIONS', null);
+
+/**
+ * Setup the search routes for each media object type by language
+ * <code>
+ * define('TS_SEARCH_ROUTES', [
+ *  TS_TOUR_PRODUCTS => [
+ *      '{LANGUAGE_CODE|default}' => [
+ *          'route' => 'reise-suche',
+ *          'title' => 'Reise Suche - Travelshop',
+ *          'meta_description' => ''
+ *      ],
+ *  ],
+ *  TS_DAYTRIPS_PRODUCTS => [
+ *      ...
+ *  ],
+ * ]);
+ * </code>
+ *
+ */
+define('TS_SEARCH_ROUTES', []);
+
+
 
 /**
  * If your using the blogfeature it's recommend to enable this two auto generated pagetypes
@@ -69,37 +91,44 @@ define('TS_VISIBILTY', [30]);
 
 
 /**
- * TTL of the Object Caching
- */
-define('TS_OBJECT_CACHE_TTL', 60);
-
-
-/**
  * the possible category tree item search fields
  * used in this files:
  *  /template-parts/pm-search/search-bar.php
  *  /template-parts/pm-search/search-bar-plain.php
  * .. to draw the primary search bars.
+ * <code>
+ * define('TS_SEARCH', [
+ *      TS_TOUR_PRODUCTS => [
+ *          [ 'id_tree' => 1207, 'fieldname' => 'zielgebiet_default', 'name' => 'Zielgebiet', 'condition_type' => 'c'],
+ *          [ 'id_tree' => 1206, 'fieldname' => 'reiseart_default', 'name' => 'Reiseart', 'condition_type' => 'c'],
+ *      ],
+ *      TS_DAYTRIPS_PRODUCTS => [
+ *          [ 'id_tree' => 1207, 'fieldname' => 'zielgebiet_default', 'name' => 'Zielgebiet', 'condition_type' => 'c'],
+ *          [ 'id_tree' => 1206, 'fieldname' => 'reiseart_default', 'name' => 'Reiseart', 'condition_type' => 'c'],
+ *      ]
+ * ]);
+ * </code>
+ *
  *
  */
 
-define('TS_SEARCH', [
-    [ 'id_tree' => 1207, 'fieldname' => 'zielgebiet_default', 'name' => 'Zielgebiet', 'condition_type' => 'c'],
-    [ 'id_tree' => 1206, 'fieldname' => 'reiseart_default', 'name' => 'Reiseart', 'condition_type' => 'c'],
-]);
+define('TS_SEARCH', []);
 
 /**
+ * @TODO ebene rein für type
  * the possible category tree item filters
  * used in /template-parts/pm-search/filter-vertical.php to draw the filter list.
+ * <code>
+ * define('TS_FILTERS', [
+ *          [ 'id_tree' => 1207, 'fieldname' => 'zielgebiet_default', 'name' => 'Zielgebiet', 'condition_type' => 'c'],
+ *          [ 'id_tree' => 1206, 'fieldname' => 'reiseart_default', 'name' => 'Reiseart', 'condition_type' => 'c'],
+ *
+ *          // Example of a category tree from a sub object
+ *          [ 'id_tree' => 1205, 'fieldname' => 'sterne_default', 'name' => 'Hotelkategorie', 'condition_type' => 'cl'],
+ *  ]);
+ * </code>
  */
-define('TS_FILTERS', [
-    [ 'id_tree' => 1207, 'fieldname' => 'zielgebiet_default', 'name' => 'Zielgebiet', 'condition_type' => 'c'],
-    [ 'id_tree' => 1206, 'fieldname' => 'reiseart_default', 'name' => 'Reiseart', 'condition_type' => 'c'],
-    [ 'id_tree' => 2655, 'fieldname' => 'befoerderung_default', 'name' => 'Beförderung', 'condition_type' => 'c'],
-    [ 'id_tree' => 1204, 'fieldname' => 'saison_default', 'name' => 'Saison', 'condition_type' => 'c'],
-    // Example of a category tree from a sub object
-    [ 'id_tree' => 1205, 'fieldname' => 'sterne_default', 'name' => 'Hotelkategorie', 'condition_type' => 'cl'],
-]);
+define('TS_FILTERS', []);
 
 /**
  * Price Format (number_format() is used for rendering)
@@ -108,7 +137,6 @@ define('TS_FILTERS', [
 define('TS_PRICE_DECIMAL_SEPARATOR', ',');
 define('TS_PRICE_THOUSANDS_SEPARATOR', '.');
 define('TS_PRICE_DECIMALS', 0);
-
 define('TS_PRICE_CURRENCY', '€');
 
 /**
@@ -121,17 +149,6 @@ define('TS_PRICE_CURRENCY_POSITION', 'RIGHT');
  */
 define('TS_IBE3_BASE_URL', 'https://demo.pressmind-ibe.net/');
 
-/**
- * Setup Redis,
- */
-
-if(!defined('PM_REDIS_HOST')){
-    define('PM_REDIS_HOST', '127.0.0.1');
-}
-
-if(!defined('PM_REDIS_PORT')){
-    define('PM_REDIS_PORT', '6379');
-}
 
 /**
  * Pagebuilder support
