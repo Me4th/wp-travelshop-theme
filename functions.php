@@ -7,15 +7,20 @@ use Pressmind\Travelshop\RouteProcessor;
 use Pressmind\Travelshop\Router;
 use Pressmind\Travelshop\Timer;
 
+require_once 'vendor/autoload.php';
+
+// load .env environment, if .env file exists
+$dotenv = Dotenv\Dotenv::createUnsafeImmutable(__DIR__);
+$dotenv->safeLoad();
 
 // this code is only for a better onboarding, remove in production
-    if(file_exists(get_template_directory().'/pm-config.php') === false ){
+    if(file_exists(get_template_directory().'/'.getenv('PM_CONFIG')) === false ){
         if(file_exists(get_template_directory().'/bootstrap.php') === false ) {
             echo 'Error: pressmind web-core SDK is not installed<br>';
             echo 'run "composer install" in ' . __DIR__;
-        } else if(file_exists(get_template_directory().'/pm-config.php') === false ) {
+        } else if(file_exists(get_template_directory().'/'.getenv('PM_CONFIG')) === false ) {
             echo 'Error: pressmind web-core SDK is not installed correctly<br>';
-            echo 'pm-config.php is missing';
+            echo getenv('PM_CONFIG').' is missing';
         }
         exit();
     }
@@ -28,9 +33,8 @@ use Pressmind\Travelshop\Timer;
             exit();
     }
 
-
-// load the theme-config
-require_once 'config-theme.php';
+// load the theme-config / config-theme.php per default, defined in .env
+require_once getenv('CONFIG_THEME');
 
 // pressmind web-core sdk
 require_once 'bootstrap.php';
@@ -40,6 +44,7 @@ require_once 'src/ThemeActivation.php';
 require_once 'src/AdminPage.php';
 require_once 'src/Shortcodes.php';
 require_once 'src/WPFunctions.php';
+require_once 'src/Search.php';
 require_once 'src/BuildSearch.php';
 require_once 'src/RouteProcessor.php';
 require_once 'src/Route.php';
@@ -51,6 +56,7 @@ require_once 'src/CategoryTreeTools.php';
 require_once 'src/PriceHandler.php';
 require_once 'src/Timer.php';
 require_once 'src/Calendar.php';
+require_once 'src/Template.php';
 
 // enable SMTP auth support
 require_once 'functions/email_smtp.php';
@@ -84,7 +90,9 @@ require_once 'functions/rewrite_rules.php';
 require_once  'functions/enqueue_js.php';
 require_once  'functions/enqueue_css.php';
 
+// Performance
 require_once  'functions/template_transient.php';
+require_once  'functions/max_image_upload.php';
 
 // Contactform 7 support, if installed, we will load some custom formfield-tags here.
 if(class_exists('WPCF7')){

@@ -15,7 +15,7 @@ if(defined('WP_DEBUG_DISPLAY') && WP_DEBUG_DISPLAY === true) {
  * during installation (install.php) this value will be set to wordpress's site_url()
  */
 
-define('SITE_URL', '');
+define('SITE_URL', getenv('SITE_URL'));
 
 // Activate multilanguage support
 // one big change is the routing, if multilanguage, all routes have the language code as prefix:
@@ -260,4 +260,33 @@ define('TS_WP_IMAGES', [
         'name' => 'Large (uncropped)'
     ],
 
+    'bigslide' => [
+        'w' => 1980,
+        'h' => null,
+        'crop' => 0,
+        'name' => 'Bigslide (uncropped)'
+    ],
+
 ]);
+
+
+/**
+ * Prevent the user from uploading images in the worppress image gallery that breaking the rules of a performant website.
+ * The value defines the max size in kilobyte of one image upload
+ */
+define('WP_IMAGE_MAX_UPLOAD_SIZE', 500);
+
+/**
+ * All images are reduced to this size if a image is bigger than the defined value
+ * The value defines the max size in pixel an image can have in this installation
+ * If the image is bigger than defined, we reduce the image size to this value
+ * You have to set this value to the max image image format, as defined in TS_WP_IMAGES
+ */
+define('WP_IMAGE_ORIGINAL_RESIZE_TO', 1980);
+
+/**
+ * Enables WEBP support. jpeg images will be generated with the internal php function imagewebp()
+ */
+define('TS_WP_IMAGE_WEBP_ENABLED', TRUE);
+define('TS_WP_IMAGE_WEBP_QUALITY', 80);
+

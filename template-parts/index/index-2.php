@@ -1,4 +1,5 @@
 <?php
+use Pressmind\Travelshop\Search;
 get_header();
 ?>
     <main>
@@ -9,15 +10,25 @@ get_header();
                     'type' => 'content', // enum (content | product)
                     'image' => get_stylesheet_directory_uri().'/assets/img/slide-1.jpg',
                     'image_alt_tag' => '',
-                    'title' => 'Weihnachtsmarkt auf der Fraueninsel mit Gut Aiderbichl',
-                    'text' => 'Ein romantisches Wintermärchen, das jedes Jahr Besucher von Nah und Fern aufs Neue begeistert, ist der Christkindlmarkt auf der Frauninsel. Festliche Beleuchtung, feinstes kunstwerk ...',
+                    'title' => 'Travel is the movement Slide 1',
+                    'text' => 'Travel is the movement of people between relatively distant geographical locations...',
+                    'btn_link' => '/blog/',
+                    'btn_link_target' => '_self', // enum(_blank, _self)
+                    'btn_label' => 'Weiterlesen'
+                ],
+                [
+                    'type' => 'content', // enum (content | product)
+                    'image' => get_stylesheet_directory_uri().'/assets/img/slide-1.jpg',
+                    'image_alt_tag' => '',
+                    'title' => 'Travel is the movement Slide 2',
+                    'text' => 'Travel is the movement of people between relatively distant geographical locations...',
                     'btn_link' => '/blog/',
                     'btn_link_target' => '_self', // enum(_blank, _self)
                     'btn_label' => 'Weiterlesen'
                 ],
                 [
                     'type' => 'product',
-                    'pm-id' => '1193003',
+                    'pm-id' => '545926',
                     'image_type' => '', // enum (from_product | custom)
                     'image' => '', // img src if image_type is 'custom'
                     'image_alt_tag' => '',
@@ -34,9 +45,8 @@ get_header();
          * @see readme-shortcodes.md
          */
 
-        $args = [
-                'class' => 'silver mt-mb-offset mt-2rem',
-        ];
+        $args = Search::getResult(['pm-ot' => TS_TOUR_PRODUCTS],2, 12, true, false);
+        $args['class'] = 'silver mt-mb-offset mt-2rem';
         load_template_transient(get_template_directory().'/template-parts/layout-blocks/search-bar.php', false, $args);
         ?>
         <div class="content-main">
@@ -57,7 +67,7 @@ get_header();
                             'pm-li' => '0,4',
                             'pm-o' => 'rand',
                             'pm-ot' => TS_TOUR_PRODUCTS
-                    ]
+                    ],
                 ];
                 load_template_transient(get_template_directory().'/template-parts/layout-blocks/product-teaser.php', false, $args);
                 ?>

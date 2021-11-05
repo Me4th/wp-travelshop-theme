@@ -68,7 +68,7 @@ jQuery(function ($) {
                 if(key == 'search-result'){
                     $('#' + key).html(data.html[key]).find('.content-block-travel-cols').fadeIn()
                         .css({top:1000,position:'relative'})
-                        .animate({top:0}, 200, 'swing')
+                        .animate({top:0}, 80, 'swing')
                 }else{
                     $('#' + key).html(data.html[key]);
                 }
@@ -102,7 +102,7 @@ jQuery(function ($) {
         this.scrollTo = function(scrollto){
             $('html, body').stop().animate({
                 'scrollTop': $(scrollto).offset().top - $('header.affix').height()
-            }, 200, 'swing');
+            }, 150, 'swing');
         }
 
         this.resultHandlerSearchBarStandalone = function(data, query_string, scrollto, total_result_span_id){
@@ -244,53 +244,43 @@ jQuery(function ($) {
             }
 
             // checkboxes
-            let tree_conditions = ['c', 'cl']; // cl = support for trees in object links
-            let i;
-            for(i in tree_conditions){
-                let selected = [];
-                $(form).find('.category-tree input[data-type="'+tree_conditions[i]+'"]:checked').each(function () {
+            let selected = [];
+            $(form).find('.category-tree input:checked').each(function () {
 
-                    let id_parent = $(this).data('id-parent');
-                    let id = $(this).data('id');
-                    let name = $(this).data('name');
-                    let type = $(this).data('type');
+                let id_parent = $(this).data('id-parent');
+                let id = $(this).data('id');
+                let name = $(this).data('name');
 
-
-                    if (!selected[name]) {
-                        selected[name] = [];
-                    }
-
-                    let i = selected[name].indexOf(id_parent);
-                    if (i > -1) {
-                        // remove if parent is set
-                        selected[name].splice(i, 1);
-                    }
-
-                    i = selected[name].indexOf(id);
-                    if (i == -1) {
-                        // has no parent, add
-                        selected[name].push(id);
-                    }
-
-                });
-
-                let delimiter = ',';
-
-                /* @todo
-                if (selected_item.data('behaivor') == 'AND'){
-                    var delimiter = '+';
-                }
-                */
-
-                let key;
-                for (key in selected) {
-                    query.push('pm-'+tree_conditions[i]+'[' + key + ']=' + selected[key].join(delimiter));
+                if (!selected[name]) {
+                    selected[name] = [];
                 }
 
+                let i = selected[name].indexOf(id_parent);
+                if (i > -1) {
+                    // remove if parent is set
+                    selected[name].splice(i, 1);
+                }
+
+                i = selected[name].indexOf(id);
+                if (i == -1) {
+                    // has no parent, add
+                    selected[name].push(id);
+                }
+
+            });
+
+            let key;
+            let delimiter = ',';
+            for (key in selected) {
+                if ($('input[name='+key+'-behavior]').val() == 'AND'){
+                    delimiter = '%2B';
+                }else{
+                    delimiter = ',';
+                }
+                query.push('pm-c[' + key + ']=' + selected[key].join(delimiter));
             }
 
             // check and set price-range
-
             let price_range = $(form).find('input[name=pm-pr]').val();
             let price_mm_range = $(form).find('input[name=pm-pr]').data('min') + '-' + $(form).find('input[name=pm-pr]').data('max');
             if (price_range && price_mm_range != price_range && price_range != '') {
@@ -298,9 +288,8 @@ jQuery(function ($) {
             }
 
             // check and set duration-range
-            let duration_range = $(form).find('input[name=pm-du]').val();
-            let duration_mm_range = $(form).find('input[name=pm-du]').data('min') + '-' + $(form).find('input[name=pm-du]').data('max');
-            if (duration_range && duration_mm_range != duration_range && duration_range != '') {
+            let duration_range = $(form).find('select[name=pm-du]').val();
+            if (duration_range && duration_range != '') {
                 query.push('pm-du=' + duration_range);
             }
 
@@ -376,7 +365,7 @@ jQuery(function ($) {
              * The query string is added to the form > a.btn > href
              * If the search box is on the same site as the search result, than the ajax search query is fired
              */
-            $(".search-box input, .search-box  select").on('change', function (e) {
+            $('#main-search').on('change', '.search-box input, .search-box, select', function (e) {
 
                 let form = $(this).closest('form');
 
