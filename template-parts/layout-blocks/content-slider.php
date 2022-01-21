@@ -51,11 +51,15 @@ foreach ($args['items'] as $item) {
                 $item['image'] = $product['items'][0]['bigslide']['url'];
                 $item['image_alt_tag'] = $product['items'][0]['bigslide']['copyright'];
             }else{
-                $item['image'] = SITE_URL . "/wp-content/themes/travelshop/assets/img/placeholder.svg.php?wh=250x170&text=image is not set";
+                $item['image'] = SITE_URL . "/placeholder.svg?wh=250x170&text=image is not set";
             }
         }
-    }elseif($item['type'] == 'content' && !empty($item['image_post_id'])){
-        $item['image'] = wp_get_attachment_image_url( $item['image_post_id'], 'bigslide');
+    }elseif($item['type'] == 'content'){
+        if(!empty($item['image_post_id'])){
+            $item['image'] = wp_get_attachment_image_url($item['image_post_id'], 'bigslide');
+        }else{
+            $item['image'] = SITE_URL . "/placeholder.svg?wh=250x170&text=image is not set";
+        }
     }
     $slide_items[] = $item;
 }
@@ -88,9 +92,37 @@ foreach ($args['items'] as $item) {
         foreach ($slide_items as $item) {
             ?>
             <article class="content-slider--item content-slider--item__<?php echo $item['type']; ?>">
-                <div class="content-slider--image">
-                    <div style="background-image: url('<?php echo $item['image']; ?>');"></div>
-                </div>
+                <?php
+                if ($item['type'] == 'content') {
+                    if ($item['media_type'] == 'video' ) {
+                    ?>
+                        <div class="content-slider--video">
+
+                            <?php
+                            $video_src = wp_get_attachment_url( $item['video'] );
+                            ?>
+                            <div class="media-video">
+                                <video autoplay muted loop style="pointer-events: none;">
+                                    <source src="<?php echo $video_src; ?>" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+
+                        </div>
+                    <?php
+                    } else {
+                    ?>
+                        <div class="content-slider--image">
+                            <div style="background-image: url('<?php echo $item['image']; ?>');"></div>
+                        </div>
+                    <?php
+                    }
+                ?>
+                <?php } else { ?>
+                    <div class="content-slider--image">
+                        <div style="background-image: url('<?php echo $item['image']; ?>');"></div>
+                    </div>
+                <?php } ?>
                 <div class="content-slider--content">
                     <div class="container">
                         <?php

@@ -6,10 +6,16 @@
 $args = [];
 $args['headline'] = $settings->headline;
 $args['text'] = $settings->text;
+$args['link_top'] = filter_var($settings->link_top , FILTER_VALIDATE_BOOLEAN);
+$args['link_teaser'] = filter_var($settings->link_teaser , FILTER_VALIDATE_BOOLEAN);
+$args['link_bottom'] = filter_var($settings->link_bottom , FILTER_VALIDATE_BOOLEAN);
+$args['link_top_text'] =  $settings->link_top_text;
+$args['link_teaser_text'] =  $settings->link_teaser_text;
+$args['link_bottom_text'] =  $settings->link_bottom_text;
 
 // bind the beaver builder settings to the query string api
 $args['search']['pm-ot'] = !empty($settings->{'pm-ot'}) ? $settings->{'pm-ot'} : ''; // id_object_type
-$args['search']['pm-l'] = !empty($settings->page) && !empty($settings->items_per_page) ? $settings->page.','.$settings->items_per_page : '';
+$args['search']['pm-l'] = (empty($settings->page) ? '0' : $settings->page).','.(empty($settings->items_per_page) ? '4' : $settings->items_per_page);
 $args['search']['pm-o'] = (!empty($settings->order_by) && !empty($settings->order)) ? (($settings->order_by == 'rand') ? 'rand' : $settings->order_by.'-'.$settings->order): '';
 $args['search']['pm-t'] = !empty($settings->{'pm-t'}) ? $settings->{'pm-t'} : ''; // fulltext term
 $args['search']['pm-id'] = !empty($settings->{'pm-id'}) ? $settings->{'pm-id'} : ''; // ids
@@ -38,4 +44,5 @@ $args['view'] = !empty($settings->{'view'}) ? $settings->{'view'} : 'Teaser1';
 
 // delete empty keys
 $args['search'] = array_filter($args['search']);
+
 load_template_transient(get_template_directory() . '/template-parts/layout-blocks/product-teaser.php', false,  $args);
