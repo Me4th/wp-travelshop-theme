@@ -6,12 +6,9 @@ jQuery(function ($) {
         this.endpoint_url = endpoint_url;
         this.requests = new Array();
 
+
         this.call = function (query_string, scrollto, total_result_span_id, callback, target) {
-
-            for (var i = 0; i < this.requests.length; i++) {
-                this.requests[i].abort();
-            }
-
+            this.oneByOneRequest();
             this.requests.push($.ajax({
                 url: this.endpoint_url + '?' + query_string,
                 method: 'GET',
@@ -19,6 +16,12 @@ jQuery(function ($) {
             }).done(function (data) {
                 callback(data, query_string, scrollto, total_result_span_id, target);
             }));
+        }
+
+        this.oneByOneRequest = function (){
+            for (let i = 0; i < this.requests.length; i++) {
+                this.requests[i].abort();
+            }
         }
 
         this.setSpinner = function (search_result) {
@@ -64,7 +67,7 @@ jQuery(function ($) {
 
             _this.removeSpinner();
 
-            for (var key in data.html) {
+            for (let key in data.html) {
                 if (key == 'search-result') {
                     $('#' + key).html(data.html[key]).find('.content-block-travel-cols').fadeIn()
                         .css({top:1000,position:'relative'})
@@ -79,8 +82,8 @@ jQuery(function ($) {
             }
 
             if (total_result_span_id != null) {
-                var total_count_span = $(total_result_span_id);
-                var str = '';
+                let total_count_span = $(total_result_span_id);
+                let str = '';
                 if (data.count == 1) {
                     str = data.count + ' ' + total_count_span.data('total-count-singular');
                 } else if (data.count > 1 || data.count == 0) {
@@ -108,8 +111,8 @@ jQuery(function ($) {
         this.resultHandlerSearchBarStandalone = function(data, query_string, scrollto, total_result_span_id){
 
             if (total_result_span_id != null) {
-                var total_count_span = $(total_result_span_id);
-                var str = '';
+                let total_count_span = $(total_result_span_id);
+                let str = '';
                 if (data.count == 1) {
                     str = data.count + ' ' + total_count_span.data('total-count-singular');
                 } else if (data.count > 1 || data.count == 0) {
@@ -414,7 +417,6 @@ jQuery(function ($) {
 
         this.autoCompleteInit = function (){
             if ($('.auto-complete').length > 0) {
-                console.log('auto autocomplete init');
                 $('.auto-complete').autocomplete({
                     serviceUrl: '/wp-content/themes/travelshop/pm-ajax-endpoint.php?action=autocomplete',
                     type: 'get',
@@ -752,6 +754,44 @@ jQuery(function ($) {
             _this.wishListInit();
         }
 
+        this.checkAvailability = function (id_offer, quantity, booking_btn){
+            this.requests.push($.ajax({
+                url: ts_ajax_check_availibility_endpoint,
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({'checks' : [{
+                    'id_offer' : id_offer,
+                    'quantity' : quantity
+                }]}),
+            }).done(function (response) {
+                $(booking_btn).find('span').html(response.data[0].btn_msg);
+                $(booking_btn).attr('title', response.data[0].msg);
+                $(booking_btn).find('.loader').hide();
+                $(booking_btn).removeClass('green');
+                $(booking_btn).addClass(response.data[0].class);
+                if(response.data[0].bookable === true){
+                    $(booking_btn).find('svg').show();
+                    //location.href = $(booking_btn).attr('href') + '&t='+data.booking_type;
+                }
+            }));
+        }
+
+        this.initBookingBtnClickHandler = function (){
+            if ($('.booking-btn').length > 0) {
+                $('.booking-btn').on('click', function (e) {
+                    if($(this).data('modal') === true){
+                        return true;
+                    }
+                    e.stopPropagation();
+                    e.preventDefault();
+                    $(this).find('.loader').show();
+                    $(this).find('svg').hide();
+                    $(this).find('span').html('');
+                    _this.checkAvailability($(this).data('id-offer'), 1, this);
+                });
+            }
+        }
+
         this.init = function(){
             _this.renderWishlist();
             _this.wishlistEventListeners();
@@ -764,6 +804,7 @@ jQuery(function ($) {
             _this.dateRangePickerInit();
             _this.initCategoryTreeSearchBarFields();
             _this.initCalendarRowClick();
+            _this.initBookingBtnClickHandler();
         }
 
     };
