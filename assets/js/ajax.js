@@ -6,12 +6,9 @@ jQuery(function ($) {
         this.endpoint_url = endpoint_url;
         this.requests = new Array();
 
+
         this.call = function (query_string, scrollto, total_result_span_id, callback, target) {
-
-            for (var i = 0; i < this.requests.length; i++) {
-                this.requests[i].abort();
-            }
-
+            this.oneByOneRequest();
             this.requests.push($.ajax({
                 url: this.endpoint_url + '?' + query_string,
                 method: 'GET',
@@ -19,6 +16,12 @@ jQuery(function ($) {
             }).done(function (data) {
                 callback(data, query_string, scrollto, total_result_span_id, target);
             }));
+        }
+
+        this.oneByOneRequest = function (){
+            for (let i = 0; i < this.requests.length; i++) {
+                this.requests[i].abort();
+            }
         }
 
         this.setSpinner = function (search_result) {
@@ -30,6 +33,18 @@ jQuery(function ($) {
         this.removeSpinner = function () {
             $('.spinner').hide();
             $('.pagination').show();
+        }
+
+        this.setButtonLoader = function (btn) {
+            btn.find('svg').hide();
+            btn.find('span').hide();
+            btn.find('.loader').show();
+        }
+
+        this.removeButtonLoader = function (btn) {
+            btn.find('svg').show();
+            btn.find('span').show();
+            btn.find('.loader').hide();
         }
 
         this.resultHandlerWishlist = function (data) {
@@ -64,7 +79,7 @@ jQuery(function ($) {
 
             _this.removeSpinner();
 
-            for (var key in data.html) {
+            for (let key in data.html) {
                 if (key == 'search-result') {
                     $('#' + key).html(data.html[key]).find('.content-block-travel-cols').fadeIn()
                         .css({top:1000,position:'relative'})
@@ -79,8 +94,8 @@ jQuery(function ($) {
             }
 
             if (total_result_span_id != null) {
-                var total_count_span = $(total_result_span_id);
-                var str = '';
+                let total_count_span = $(total_result_span_id);
+                let str = '';
                 if (data.count == 1) {
                     str = data.count + ' ' + total_count_span.data('total-count-singular');
                 } else if (data.count > 1 || data.count == 0) {
@@ -105,21 +120,19 @@ jQuery(function ($) {
             }, 150, 'swing');
         }
 
-        this.resultHandlerSearchBarStandalone = function(data, query_string, scrollto, total_result_span_id){
+        this.resultHandlerSearchBarStandalone = function(data, query_string, scrollto, btn){
 
-            if (total_result_span_id != null) {
-                var total_count_span = $(total_result_span_id);
-                var str = '';
-                if (data.count == 1) {
-                    str = data.count + ' ' + total_count_span.data('total-count-singular');
-                } else if (data.count > 1 || data.count == 0) {
-                    str = data.count + ' ' + total_count_span.data('total-count-plural');
-                } else {
-                    str = data.count + ' ' + total_count_span.data('total-count-default');
-                }
-                total_count_span.html(str.trim());
+            _this.removeButtonLoader(btn)
+            let total_count_span = btn.find('span');
+            let str = '';
+            if (data.count == 1) {
+                str = data.count + ' ' + total_count_span.data('total-count-singular');
+            } else if (data.count > 1 || data.count == 0) {
+                str = data.count + ' ' + total_count_span.data('total-count-plural');
+            } else {
+                str = data.count + ' ' + total_count_span.data('total-count-default');
             }
-
+            total_count_span.html(str.trim());
         }
 
         this.renderWishlist = function() {
@@ -365,7 +378,7 @@ jQuery(function ($) {
              * The query string is added to the form > a.btn > href
              * If the search box is on the same site as the search result, than the ajax search query is fired
              */
-            $('#main-search').on('change', '.search-box input, .search-box, select', function (e) {
+            $('#main-search').on('change', '.search-box input, .search-box select', function (e) {
 
                 let form = $(this).closest('form');
 
@@ -380,10 +393,11 @@ jQuery(function ($) {
                 let current_location = window.location.href.split('?');
                 if (current_location[0] == href[0]) {
                     _this.setSpinner('#pm-search-result');
-                    _this.call(query_string, null, '.search-bar-total-count', _this.resultHandlerSearch);
+                    _this.call(query_string, null, button, _this.resultHandlerSearch);
                 } else {
+                    _this.setButtonLoader(button);
                     // in this case we have placed a search box on a site without a direct result output
-                    _this.call(query_string, null, '.search-bar-total-count', _this.resultHandlerSearchBarStandalone);
+                    _this.call(query_string, null, button, _this.resultHandlerSearchBarStandalone);
                 }
 
                 e.preventDefault();
@@ -414,7 +428,6 @@ jQuery(function ($) {
 
         this.autoCompleteInit = function (){
             if ($('.auto-complete').length > 0) {
-                console.log('auto autocomplete init');
                 $('.auto-complete').autocomplete({
                     serviceUrl: '/wp-content/themes/travelshop/pm-ajax-endpoint.php?action=autocomplete',
                     type: 'get',
@@ -479,6 +492,11 @@ jQuery(function ($) {
                     "minDate": $('[data-type="daterange"]').data('mindate'),
                     "maxDate": $('[data-type="daterange"]').data('maxdate'),
                     "showCustomRangeLabel": false,
+                    isCustomDate: function(date) {
+                        if($('[data-type="daterange"]').data('departures').indexOf(date.format('YYYY-MM-DD')) >= 0){
+                            return 'has_departures';
+                        }
+                        },
                     // "autoApply": true,
                     "locale": {
                         "format": "DD.MM.YYYY",
@@ -752,6 +770,44 @@ jQuery(function ($) {
             _this.wishListInit();
         }
 
+        this.checkAvailability = function (id_offer, quantity, booking_btn){
+            this.requests.push($.ajax({
+                url: ts_ajax_check_availibility_endpoint,
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({'checks' : [{
+                    'id_offer' : id_offer,
+                    'quantity' : quantity
+                }]}),
+            }).done(function (response) {
+                $(booking_btn).find('span').html(response.data[0].btn_msg);
+                $(booking_btn).attr('title', response.data[0].msg);
+                $(booking_btn).find('.loader').hide();
+                $(booking_btn).removeClass('green');
+                $(booking_btn).addClass(response.data[0].class);
+                if(response.data[0].bookable === true){
+                    $(booking_btn).find('svg').show();
+                    location.href = $(booking_btn).attr('href') + '&t='+response.data[0].booking_type;
+                }
+            }));
+        }
+
+        this.initBookingBtnClickHandler = function (){
+            if ($('.booking-btn').length > 0) {
+                $('.booking-btn').on('click', function (e) {
+                    if($(this).data('modal') === true){
+                        return true;
+                    }
+                    e.stopPropagation();
+                    e.preventDefault();
+                    $(this).find('.loader').show();
+                    $(this).find('svg').hide();
+                    $(this).find('span').html('');
+                    _this.checkAvailability($(this).data('id-offer'), 1, this);
+                });
+            }
+        }
+
         this.init = function(){
             _this.renderWishlist();
             _this.wishlistEventListeners();
@@ -764,6 +820,7 @@ jQuery(function ($) {
             _this.dateRangePickerInit();
             _this.initCategoryTreeSearchBarFields();
             _this.initCalendarRowClick();
+            _this.initBookingBtnClickHandler();
         }
 
     };

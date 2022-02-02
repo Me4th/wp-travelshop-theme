@@ -10,7 +10,7 @@ get_header();
          * @see readme-shortcodes.md
          */
 
-        $args = Search::getResult(['pm-ot' => TS_TOUR_PRODUCTS],2, 12, true, false);
+        $args = Search::getResult(['pm-ot' => TS_TOUR_PRODUCTS],2, 12, true, true);
         $args['headline'] = 'Finde deine Traumreise!';
         load_template_transient(get_template_directory().'/template-parts/layout-blocks/search-header.php', false, $args);
         ?>
@@ -28,8 +28,14 @@ get_header();
                 $args = [
                     'headline' => 'Reise-Empfehlungen',
                     'text' => 'Travel is the movement of people between relatively distant geographical locations, and can involve travel by foot, bicycle, automobile, train, boat, bus, airplane, or other means, with or without luggage, and can be one way or round trip.',
+                    'link_top' => true,
+                    'link_bottom' => true,
+                    'link_teaser' => true,
+                    'link_top_text' => 'Alle [TOTAL_RESULT] Reisen zum Thema anzeigen',
+                    'link_bottom_text' => 'Alle [TOTAL_RESULT] Reisen zum Thema anzeigen',
+                    'link_teaser_text' => 'Alle [TOTAL_RESULT] Reisen zum Thema anzeigen',
                     'search' => [
-                            'pm-li' => '0,4',
+                            'pm-l' => '0,3',
                             'pm-o' => 'rand',
                             'pm-ot' => TS_TOUR_PRODUCTS
                     ]
