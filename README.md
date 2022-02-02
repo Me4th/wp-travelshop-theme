@@ -1,4 +1,4 @@
-# WordPress travelshop theme
+# WordPress travelshop theme number ONE!
 This is a responsive travelshop theme for WordPress.
 The frontend is based on pure bootstrap components and a few common web libraries.
 The backend is based on the pressmind® PIM system and the [pressmind® SDK](https://github.com/pressmind/sdk).
