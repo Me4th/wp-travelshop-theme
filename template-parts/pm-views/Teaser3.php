@@ -45,7 +45,7 @@ if (empty($filteredParams) === false) {
     <div class="stripe-inner">
         <div class="stripe-image"
              role="img" aria-label="<?php echo $args['headline']; ?>"
-             style="background-image:url(<?php echo !empty($args['image']['url']) ? $args['image']['url'] : '/placeholder.svg?wh=250x170&text=bilder_default%20not%20found' ; ?>);">
+             style="background-image:url(<?php echo !empty($args['image_square']['url']) ? $args['image_square']['url'] : '/placeholder.svg?wh=250x170&text=bilder_default%20not%20found'; ?>);">
             <?php
             echo Template::render(APPLICATION_PATH.'/template-parts/micro-templates/wishlist-heart.php', [
                    'cheapest_price' => $args['cheapest_price'],
@@ -87,8 +87,7 @@ if (empty($filteredParams) === false) {
                     <strong>Abreise</strong>
                     <?php
                     echo Template::render(APPLICATION_PATH.'/template-parts/micro-templates/date-dropdown.php', [
-                        'date_departure' => $args['cheapest_price']->date_departure,
-                        'date_arrival' => $args['cheapest_price']->date_arrival,
+                        'date_departures' => $args['cheapest_price']->date_departures,
                         'dates_per_month' => $args['dates_per_month'],
                         'departure_date_count' => $args['departure_date_count'],
                         'url' => $args['url']
