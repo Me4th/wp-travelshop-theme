@@ -207,8 +207,10 @@ jQuery(function ($) {
     // --------------------------------
     // --- Gallery
     // --------------------------------
+    var slider;
+
     if ($('.detail-gallery-overlay-inner').length > 0) {
-        var slider = tns({
+        slider = tns({
             container: '.detail-gallery-overlay-inner',
             items: 1,
             mouseDrag: true,
@@ -237,6 +239,12 @@ jQuery(function ($) {
             $('.detail-gallery-overlay').removeClass('is--show');
             $('body').removeClass('modal-open');
         }
+        $('.detail-gallery-modal-image-link').on('click', function (e) {
+            e.preventDefault();
+            console.log($(e.target).data('index'));
+            slider.goTo(parseInt($(e.target).attr('data-index')));
+            addGalleryClasses();
+        });
         $('.detail-image-grid-holder img').on('click', function () {
             addGalleryClasses();
         })
