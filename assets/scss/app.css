@@ -12577,15 +12577,6 @@ body.fl-builder .content-block.content-page {
   padding-top: 0 !important;
 }
 
-.icon-tabler.icon-tabler-caret-right {
-  width: 15px;
-  height: 15px;
-}
-.icon-tabler.icon-tabler-check {
-  width: 12px;
-  height: 12px;
-}
-
 /**
  *  Global offcanvas mixin wich is used in breakpoints by variant elements.
  */
@@ -14035,6 +14026,10 @@ body.fl-builder .content-block.content-page {
   padding-top: 96%;
 }
 
+.detail-gallery-modal-image-link img {
+  pointer-events: none;
+}
+
 .detail-gallery-overlay {
   position: fixed;
   top: 0;
@@ -14071,6 +14066,9 @@ body.fl-builder .content-block.content-page {
   text-shadow: 0 0 10px #000;
   line-height: 40px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .detail-gallery-overlay button.detail-gallery-overlay-close:hover, .detail-gallery-overlay button.detail-gallery-overlay-close:focus, .detail-gallery-overlay button.detail-gallery-overlay-close:active {
   box-shadow: 0;
@@ -14095,6 +14093,7 @@ body.fl-builder .content-block.content-page {
   transform: translateY(-50%);
   left: 30px;
   right: 30px;
+  width: auto;
   margin-top: 40px;
   pointer-events: none;
   z-index: 20;
@@ -14107,13 +14106,15 @@ body.fl-builder .content-block.content-page {
   background: transparent;
   padding: 0;
   margin: 0;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   float: left;
   color: rgba(255, 255, 255, 0.5);
   transition: color 0.3s;
   text-shadow: 0 0 10px #000;
   font-size: 1rem;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.25);
   width: 40px;
   height: 40px;
   border-radius: 20px;
@@ -17824,6 +17825,7 @@ figure.wp-block-image figcaption {
 .itinerary .itinerary-step .itinerary-step-more .itinerary-step-gallery img, .itinerary .itinerary-step .itinerary-step-more .itinerary-step-gallery-image {
   width: 100%;
   height: auto;
+  pointer-events: none;
 }
 .itinerary .itinerary-step .itinerary-step-more .itinerary-step-gallery img-copyright, .itinerary .itinerary-step .itinerary-step-more .itinerary-step-gallery-image-copyright {
   text-align: left;
@@ -19115,6 +19117,56 @@ figure.wp-block-image figcaption {
 }
 .category-header.category-header--transparent .category-header-content {
   max-width: 680px;
+}
+
+.category-bar {
+  padding: 2rem 0;
+}
+.category-bar h2 {
+  text-align: center;
+  font-weight: normal;
+  margin-bottom: 1rem;
+}
+.category-bar .category-bar-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.category-bar .category-bar-items .category-bar-item {
+  background: #fff;
+  box-shadow: 1px 1px 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ccc;
+  border-radius: 2rem;
+  padding: 0.25rem 1rem;
+  white-space: nowrap;
+  text-align: center;
+  justify-self: center;
+  margin: 0.5rem;
+  min-width: calc(50% - 1rem);
+}
+.category-bar .category-bar-items .category-bar-item strong {
+  font-size: 0.9rem;
+}
+.category-bar .category-bar-items .category-bar-item small {
+  margin-left: 0.25rem;
+  font-size: 0.7rem;
+  color: #27ae60;
+}
+@media (min-width: 768px) {
+  .category-bar .category-bar-items .category-bar-item {
+    min-width: 0;
+  }
+  .category-bar .category-bar-items .category-bar-item strong {
+    font-size: 1.3rem;
+  }
+  .category-bar .category-bar-items .category-bar-item small {
+    font-size: 1rem;
+  }
+}
+@media (min-width: 1200px) {
+  .category-bar .category-bar-items .category-bar-item {
+    margin: 1rem;
+  }
 }
 
 .footer-main {
