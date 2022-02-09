@@ -355,14 +355,11 @@ $args['breadcrumb'][] = $tmp;
                                 // = = = > load contact box < = = =
                                 load_template(get_template_directory().'/template-parts/pm-views/detail-blocks/contact-box.php', false, $args);
                                 // = = = > load contact box < = = =
-                                $args_trust = ['name' => $args['headline']];
-                                load_template_transient(get_template_directory().'/template-parts/pm-views/detail-blocks/trust-box.php', false, $args_trust, 0);
-                                // = = = > load contact box < = = =
                                 $argsTeam = [];
                                 $argsTeam['classes'] = 'col-12';
                                 $argsTeam['items'] = [];
-                                $argsTeam['headline'] = 'Ihr Ansprechpartner';
-                                $argsTeam['text'] = 'Bei jeglichen Fragen rund um Ihre Reise, steht Ihnen einer unserer Ansprechpartner zur Seite.';
+                                $argsTeam['headline'] = '';
+                                $argsTeam['text'] = '';
                                 $argsTeam['items'][0] = [];
                                 $argsTeam['items'][0]['image_id'] = '29'; 
                                 $argsTeam['items'][0]['name'] = 'Max Mustermann';
@@ -371,6 +368,9 @@ $args['breadcrumb'][] = $tmp;
                                 $argsTeam['items'][0]['mail'] = 'info@example.com';
                                 $argsTeam['items'][0]['phone'] = '+49 012 345 678';
                                 load_template(get_template_directory().'/template-parts/layout-blocks/team.php', false, $argsTeam);
+                                // = = = > load contact box < = = =
+                                $args_trust = ['name' => $args['headline']];
+                                load_template_transient(get_template_directory().'/template-parts/pm-views/detail-blocks/trust-box.php', false, $args_trust, 0);
                             ?>
                     </div>
                 </div>
