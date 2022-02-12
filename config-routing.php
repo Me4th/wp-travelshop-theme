@@ -236,6 +236,10 @@ function ts_detail_hook($data)
         }
 
         $wp_query->set('media_objects', $mediaObjects);
+        add_filter( 'body_class', function( $classes ) {
+            $classes[] = 'pm-detail-page';
+            return $classes;
+        });
         return;
 
     } catch (\Exception $e) {
@@ -290,9 +294,11 @@ function ts_search_hook($data)
 
     // set the id of the current media object as wp parameter
     $wp_query->set('id_object_type', $data['id_object_type']);
+    add_filter( 'body_class', function( $classes ) {
+        $classes[] = 'pm-search-page';
+        return $classes;
+    });
     return;
-
-
 }
 
 add_action('ts_search_hook', 'ts_search_hook');
@@ -357,6 +363,10 @@ function ts_calendar_hook($data)
         */
 
         //$wp_query->set('media_objects', $mediaObjects);
+        add_filter( 'body_class', function( $classes ) {
+            $classes[] = 'pm-calendar-page';
+            return $classes;
+        });
         return;
 
     } catch (\Exception $e) {
