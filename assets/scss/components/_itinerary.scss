@@ -132,7 +132,7 @@
                 display: flex !important;
                 overflow-x: auto;
 
-                a {
+                >div {
                     display: block;
                     position: relative;
                     pointer-events: none;
@@ -168,12 +168,13 @@
                     display: flex !important;
                     transform: none !important;
 
-                    a {
+                    >div {
                         display: block;
                         position: relative;
                         width: 31%;
                         margin: .5rem 1.16666%;
                         pointer-events: all;
+                        cursor: pointer;
 
                         &:last-child {
                             margin-right: 0;

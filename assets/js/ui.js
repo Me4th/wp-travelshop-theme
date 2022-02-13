@@ -88,6 +88,8 @@ jQuery(function ($) {
             navContainer: '.image-slider',
             navAsThumbnails: true,
             edgePadding: 15,
+            lazyload: true,
+            lazyloadSelector: '.imglazy',
             responsive: {
                 992: {
                     disable: true
@@ -146,6 +148,8 @@ jQuery(function ($) {
                     navContainer: '.it-gallery-' + key,
                     navAsThumbnails: true,
                     edgePadding: 15,
+                    lazyload: true,
+                    lazyloadSelector: '.imglazy',
                     responsive: {
                         992: {
                             disable: true
@@ -216,6 +220,8 @@ jQuery(function ($) {
             mouseDrag: true,
             navContainer: '#detail-gallery-thumbnails',
             navAsThumbnails: true,
+            lazyload: true,
+            lazyloadSelector: '.imglazy',
             controlsText: ['<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="#FFFFFF" fill="none" stroke-linecap="round" stroke-linejoin="round">\n' +
                 '  <path stroke="none" d="M0 0h24v24H0z"/>\n' +
                 '  <polyline points="15 6 9 12 15 18" />\n' +
@@ -239,8 +245,11 @@ jQuery(function ($) {
             $('.detail-gallery-overlay').removeClass('is--show');
             $('body').removeClass('modal-open');
         }
-        $('.detail-gallery-modal-image-link').on('click', function (e) {
-            e.preventDefault();
+        // Count Images on Detail-Page and insert into Header
+        let imgCount = $('.detail-gallerythumb-count span').text();
+        $('.detail-gallerythumb-count span').text(parseInt(imgCount) + $('.detail-gallery-modal-image').length);
+        // Select current Picture in Modal on click
+        $('.detail-gallery-modal-image').on('click', function (e) {
             console.log($(e.target).data('index'));
             slider.goTo(parseInt($(e.target).attr('data-index')));
             addGalleryClasses();

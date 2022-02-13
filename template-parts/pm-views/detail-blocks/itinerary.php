@@ -69,12 +69,12 @@ if(!$valid){
                     </div>
                     <div class="itinerary-step-gallery it-gallery-<?php echo $key; ?>">
                         <?php foreach($step->document_media_objects as $picture) { ?>
-                            <a href="<?php echo $picture->getUri('detail_gallery'); ?>" class="detail-gallery-modal-image-link" data-index="<?php echo $pictureIndex; ?>">
-                              <img src="<?php echo $picture->getUri('teaser'); ?>" alt="<?php echo $picture->alt; ?>" loading="lazy" />
-                              <div class="itinerary-step-gallery-image-copyright">
+                            <div>
+                                <img class="detail-gallery-modal-image " data-index="<?php echo $pictureIndex; ?>" src="<?php echo $picture->getUri('teaser'); ?>" alt="<?php echo $picture->alt; ?>" loading="lazy" />
+                                <div class="itinerary-step-gallery-image-copyright">
                                 <?php echo $picture->copyright; ?>
-                              </div>
-                            </a>
+                                </div>
+                            </div>
                             <?php $args['pictures'][] = [
                                     'caption' => $picture->caption,
                                     'copyright' => $picture->copyright,
