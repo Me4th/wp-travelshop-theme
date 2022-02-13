@@ -11,7 +11,7 @@ use Pressmind\Travelshop\Template;
         <div class="image-slider">
             <?php foreach ($args['pictures'] as $picture) { ?>
                 <div>
-                    <img src="<?php echo $picture['url_detail']; ?>" alt="<?php echo $picture['caption']; ?>"
+                    <img class="imglazy" data-src="<?php echo $picture['url_detail']; ?>" src="<?php echo $picture['url_detail']; ?>" alt="<?php echo $picture['caption']; ?>"
                          loading="lazy"/>
                     <div class="image-slider-copyright">
                         <?php echo $picture['copyright']; ?>
@@ -66,7 +66,7 @@ use Pressmind\Travelshop\Template;
             <div style="background-image: url(<?php echo $args['pictures'][1]['url_thumbnail']; ?>);"  class="detail-gallerythumb">
                  <span class="detail-gallerythumb-count">
                      <?php if (count($args['pictures']) >= 2) { ?>
-                         + <?php // echo count($args['pictures']) - 1; ?>
+                         + <span><?php echo count($args['pictures']) - 1; ?></span>
                      <?php } ?>
                  </span>
             </div>
