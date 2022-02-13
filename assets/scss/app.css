@@ -17811,7 +17811,7 @@ figure.wp-block-image figcaption {
 .itinerary .itinerary-step .itinerary-step-more .itinerary-step-gallery {
   margin: 0 0 1rem 0;
   display: flex !important;
-  overflow-x: auto;
+  overflow: hidden;
 }
 .itinerary .itinerary-step .itinerary-step-more .itinerary-step-gallery > div {
   display: block;
@@ -18126,7 +18126,7 @@ figure.wp-block-image figcaption {
 .description-block-wrapper .description-block-element .description-block-element-gallery {
   margin: 0 0 1rem 0;
   display: flex !important;
-  overflow-x: auto;
+  overflow: hidden;
 }
 .description-block-wrapper .description-block-element .description-block-element-gallery > div {
   display: block;
