@@ -135,7 +135,6 @@
                 >div {
                     display: block;
                     position: relative;
-                    pointer-events: none;
 
                     &:last-child {
                         margin-right: 0;
@@ -147,7 +146,6 @@
 
                     width: 100%;
                     height: auto;
-                    pointer-events: none;
 
                     &-copyright {
                         text-align: left;

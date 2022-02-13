@@ -17816,7 +17816,6 @@ figure.wp-block-image figcaption {
 .itinerary .itinerary-step .itinerary-step-more .itinerary-step-gallery > div {
   display: block;
   position: relative;
-  pointer-events: none;
 }
 .itinerary .itinerary-step .itinerary-step-more .itinerary-step-gallery > div:last-child {
   margin-right: 0;
@@ -17824,7 +17823,6 @@ figure.wp-block-image figcaption {
 .itinerary .itinerary-step .itinerary-step-more .itinerary-step-gallery img, .itinerary .itinerary-step .itinerary-step-more .itinerary-step-gallery-image {
   width: 100%;
   height: auto;
-  pointer-events: none;
 }
 .itinerary .itinerary-step .itinerary-step-more .itinerary-step-gallery img-copyright, .itinerary .itinerary-step .itinerary-step-more .itinerary-step-gallery-image-copyright {
   text-align: left;
@@ -18133,7 +18131,6 @@ figure.wp-block-image figcaption {
 .description-block-wrapper .description-block-element .description-block-element-gallery > div {
   display: block;
   position: relative;
-  pointer-events: none;
 }
 .description-block-wrapper .description-block-element .description-block-element-gallery > div:last-child {
   margin-right: 0;
