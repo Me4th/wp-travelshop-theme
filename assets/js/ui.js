@@ -66,6 +66,21 @@ jQuery(function ($) {
     });
 
     // --------------------------------
+    // --- Empty Wishlist Modal
+    // --------------------------------
+    $('.wishlist-toggler').on('click', (e) => {
+        let wishlist = JSON.parse(window.localStorage.getItem('wishlist'));
+        if ($.isEmptyObject(wishlist)) {
+            e.stopPropagation();
+            $('body').find('#modal-id-post-emptywishlist').find('.modal-inner').css('max-width', 'calc(650px + 4rem)');
+            $('body').find('#modal-id-post-emptywishlist').addClass('is--open');
+            var target = document.querySelector('.is--open .modal-body-outer');
+            bodyScrollLock.disableBodyScroll(target);
+        }
+    });
+
+
+    // --------------------------------
     // --- Detail Bottom Bar
     // --------------------------------
     $(window).scroll(function () {
@@ -250,7 +265,6 @@ jQuery(function ($) {
         $('.detail-gallerythumb-count span').text(parseInt(imgCount) + $('.detail-gallery-modal-image').length);
         // Select current Picture in Modal on click
         $('.detail-gallery-modal-image').on('click', function (e) {
-            console.log($(e.target).data('index'));
             slider.goTo(parseInt($(e.target).attr('data-index')));
             addGalleryClasses();
         });

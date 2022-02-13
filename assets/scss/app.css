@@ -19173,6 +19173,62 @@ figure.wp-block-image figcaption {
   }
 }
 
+.wishlist-tutorial .entry-text {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+.wishlist-tutorial .wishlist-tutorial-blocks {
+  margin: 2rem auto;
+}
+.wishlist-tutorial .wishlist-tutorial-blocks .wishlist-tutorial-block {
+  max-width: 650px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-top: 0;
+}
+.wishlist-tutorial .wishlist-tutorial-blocks .wishlist-tutorial-block .block-content {
+  flex: 1;
+  padding: 1rem 2rem;
+}
+.wishlist-tutorial .wishlist-tutorial-blocks .wishlist-tutorial-block .block-image {
+  width: 30%;
+  max-width: 175px;
+  height: auto;
+  border-radius: 50%;
+  margin: 1rem 2rem;
+  border: 1px solid #ccc;
+}
+.wishlist-tutorial .wishlist-tutorial-blocks .wishlist-tutorial-block:nth-child(odd) {
+  background-color: #e9ecef;
+}
+.wishlist-tutorial .wishlist-tutorial-blocks .wishlist-tutorial-block:first-child {
+  border-top: 1px solid #ccc;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.wishlist-tutorial .wishlist-tutorial-blocks .wishlist-tutorial-block:last-child {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+@media (max-width: 767.98px) {
+  .wishlist-tutorial .wishlist-tutorial-blocks .wishlist-tutorial-block .block-content {
+    padding: 1rem;
+  }
+  .wishlist-tutorial .wishlist-tutorial-blocks .wishlist-tutorial-block .block-content h2 {
+    font-size: 1rem;
+  }
+  .wishlist-tutorial .wishlist-tutorial-blocks .wishlist-tutorial-block .block-content p {
+    font-size: 0.8rem;
+  }
+  .wishlist-tutorial .wishlist-tutorial-blocks .wishlist-tutorial-block .block-image {
+    margin: 1rem;
+  }
+}
+
 .footer-main {
   background-color: #e9ecef;
 }

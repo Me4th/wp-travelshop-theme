@@ -1,0 +1,68 @@
+.wishlist-tutorial {
+    .entry-text {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .wishlist-tutorial-blocks {
+        margin: 2rem auto;
+
+        .wishlist-tutorial-block {
+            max-width: 650px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-top: 0;
+
+            .block-content {
+                flex: 1;
+                padding: 1rem 2rem;
+            }
+
+            .block-image {
+                width: 30%;
+                max-width: 175px;
+                height: auto;
+                border-radius: 50%;
+                margin: 1rem 2rem;
+                border: 1px solid #ccc;
+            }
+
+            &:nth-child(odd) {
+                background-color: #e9ecef;
+            }
+
+            &:first-child {
+                border-top: 1px solid #ccc;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+            }
+
+            &:last-child {
+                border-bottom-left-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+
+            @include media-breakpoint-down(sm) {
+                .block-content {
+                    padding: 1rem;
+
+                    h2 {
+                        font-size: 1rem;
+                    }
+
+                    p {
+                        font-size: .8rem;
+                    }
+                }
+
+                .block-image {
+                    margin: 1rem;
+                }
+            }
+        }
+    }
+}

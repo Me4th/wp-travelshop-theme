@@ -1,4 +1,12 @@
 <footer class="footer-main">
+    <?php
+    // = = = > load empty wishlist modal window < = = =
+    $args_modal = [];
+    $args_modal['title'] = 'Ihr Merkzettel...';
+    $args_modal['id_modal'] = 'emptywishlist';
+    $args_modal['content'] = Pressmind\Travelshop\Template::render(APPLICATION_PATH . '/template-parts/layout-blocks/wishlist-tutorial.php', $args);;
+    echo Pressmind\Travelshop\Template::render(APPLICATION_PATH . '/template-parts/layout-blocks/modalscreen.php', $args_modal);
+    ?>
     <div class="travelshop_above_footer">
         <div class="container">
             <div class="travelshop_trust_item">
