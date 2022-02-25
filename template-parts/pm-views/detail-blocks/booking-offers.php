@@ -13,7 +13,6 @@ use Pressmind\Travelshop\Template;
  */
 
 $filter = new CheapestPrice();
-$filter->occupancies_disable_fallback = false;
 $filter->duration_from = $args['cheapest_price']->duration;
 $filter->duration_to = $args['cheapest_price']->duration;
 $filter->transport_types = $args['cheapest_price']->transport_type;
@@ -51,7 +50,13 @@ if (!empty($offers)) { ?>
                                     Dauer
                                 </div>
                                 <div class="col-3">
-                                    Zeitraum
+                                    <?php
+                                    if($offer->duration == 1){
+                                        ?>Datum<?php
+                                    }else{
+                                        ?>Zeitraum<?php
+                                    }
+                                    ?>
                                 </div>
                                 <div class="col-3">
                                     Leistung

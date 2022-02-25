@@ -15,7 +15,7 @@ use Pressmind\Travelshop\RouteHelper;
 
 // NO WORDPRESS FUNCTIONS HERE! (also used in ajax calls)
 ?>
-<form id="main-search" method="GET">
+<form id="main-search" method="GET" action="<?php echo SITE_URL . '/' . trim(RouteHelper::get_url_by_object_type($args['id_object_type']) . '/','/'); ?>">
     <input type="hidden" name="pm-ot" value="<?php echo $args['id_object_type']; ?>">
     <div class="search-wrapper--inner search-box">
         <div class="row">
@@ -41,7 +41,7 @@ use Pressmind\Travelshop\RouteHelper;
                 <div class="form-group mb-0">
                     <label class="d-none d-md-block">&nbsp;</label>
                     <a class="btn btn-primary btn-block"
-                       href="<?php echo SITE_URL . '/' . trim(RouteHelper::get_url_by_object_type($args['id_object_type']) . '/','/'); ?>">
+                       href="<?php echo SITE_URL . '/' . trim(RouteHelper::get_url_by_object_type($args['id_object_type']),'/'). '/'; ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="20"
                              height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none"
                              stroke-linecap="round" stroke-linejoin="round">
