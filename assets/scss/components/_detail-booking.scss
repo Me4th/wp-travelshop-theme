@@ -1,4 +1,9 @@
 // -- detail box
+.duration-select {
+	width: auto;
+	margin-bottom: 1rem;
+	margin-top: -1rem;
+}
 .content-block.content-block-detail-booking {
 	border-top: 1px solid $gray-200;
 	padding: 0;
@@ -31,7 +36,13 @@
 			box-shadow: 0 1px 10px rgba(0, 0, 0, .11), 0 4px 5px rgba(0, 0, 0, .05),
 				0 2px 4px rgba(0, 0, 0, .1);
 
+			.icon-tabler-circle-check {
+				display: none;
+			}
 			&.checked {
+				.icon-tabler-circle-check {
+					display: inline-block;
+				}
 				border-bottom: 3px solid #27ae60;
 			}
 

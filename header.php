@@ -37,9 +37,34 @@ global $PMTravelShop;
     <script>
         var ts_ajax_check_availibility_endpoint = '<?php echo defined('TS_IBE3_CHECK_AVAILABILITY_URL') && !empty(TS_IBE3_CHECK_AVAILABILITY_URL) ? TS_IBE3_CHECK_AVAILABILITY_URL : '/wp-content/themes/travelshop/pm-ajax-endpoint.php'; ?>';
         var ts_pwa = <?php echo defined('TS_PWA') && TS_PWA === true ? 'true' : 'false'; ?>;
+        <?php if(defined('TS_PARTNERLINK_PARAMETER_NAME')) {
+            echo "const partnerParam = '" . TS_PARTNERLINK_PARAMETER_NAME . "';";
+        } else {
+            echo "const partnerParam = 'partnerid';";
+        } ?>
+        <?php if(defined('TS_PARTNERLINK_VALID_DAYS')) {
+            echo "const partnerTimeout = " . TS_PARTNERLINK_VALID_DAYS . ";";
+        } else {
+            echo "const partnerTimeout = 30;";
+        } ?>
     </script>
+    <?php if(defined('TS_GTM_CODE')) { ?>
+        <!-- Google Tag Manager -->
+            <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','<?php echo TS_GTM_CODE; ?>');</script>
+        <!-- End Google Tag Manager -->
+    <?php } ?>
 </head>
 <body <?php body_class(); ?>>
+<?php if(defined('TS_GTM_CODE')) { ?>
+    <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo TS_GTM_CODE; ?>"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+<?php } ?>
 <?php
 load_template_transient(get_template_directory().'/template-parts/layout-blocks/cookie-consent.php', false);
 ?>
