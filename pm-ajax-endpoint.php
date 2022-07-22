@@ -8,11 +8,9 @@ use \Pressmind\ORM\Object\MediaObject;
 use \Pressmind\Search\CheapestPrice;
 use \Pressmind\Travelshop\PriceHandler;
 use \Pressmind\Travelshop\IB3Tools;
-use Pressmind\Travelshop\Template;
+use \Pressmind\Travelshop\Template;
 
-//error_reporting(-1);
-//ini_set('display_errors', 'On');
-
+define('DOING_AJAX', true);
 require_once 'vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createUnsafeImmutable(__DIR__);
 $dotenv->safeLoad();
@@ -35,11 +33,44 @@ $Output->html = array();
 $Output->msg = null;
 $Output->count = null;
 $request = json_decode(file_get_contents('php://input'));
-if (empty($_GET['action'])) {
+if (empty($_GET['action']) && !empty($_POST['action'])) {
     $Output->result = $request;
     echo json_encode($Output);
     exit;
 } else if ($_GET['action'] == 'search') {
+    $output = null;
+    $view = 'Teaser1';
+    if (!empty($_GET['view']) && preg_match('/^[0-9A-Za-z\_]+$/', $_GET['view']) !== false) {
+        $view = $_GET['view'];
+        if ($view == 'Calendar1') {
+            $output = 'date_list';
+        }
+    }
+    $args = Search::getResult($_GET, 2, 12, true, false, TS_TTL_FILTER, TS_TTL_SEARCH, $output);
+    $Output->count = (int)$args['total_result'];
+    if ($view == 'data') {
+        $Output->data = $args;
+    } else {
+        ob_start();
+        require 'template-parts/pm-search/result.php';
+        $Output->html['search-result'] = ob_get_contents();
+        ob_end_clean();
+        ob_start();
+        require 'template-parts/pm-search/filter-vertical.php';
+        $Output->html['search-filter'] = ob_get_contents();
+        ob_end_clean();
+    }
+    $Output->error = false;
+    $result = json_encode($Output);
+    if(json_last_error() > 0){
+        $Output->error = true;
+        $Output->msg = 'json error: '.json_last_error_msg();
+        $Output->html = $Output->msg;
+        $result = json_encode($Output);
+    }
+    echo $result;
+    exit;
+}  else if ($_GET['action'] == 'slider') { 
     $output = null;
     $view = 'Teaser1';
     if(!empty($_GET['view']) && preg_match('/^[0-9A-Za-z\_]+$/', $_GET['view']) !== false){
@@ -50,13 +81,10 @@ if (empty($_GET['action'])) {
     }
     $args = Search::getResult($_GET, 2, 12, true, false, TS_TTL_FILTER, TS_TTL_SEARCH, $output);
     ob_start();
-    require 'template-parts/pm-search/result.php';
-    $Output->count = (int)$args['total_result'];
-    $Output->html['search-result'] = ob_get_contents();
-    ob_end_clean();
-    ob_start();
-    require 'template-parts/pm-search/filter-vertical.php';
-    $Output->html['search-filter'] = ob_get_contents();
+    foreach ($args['items'] as $item) {
+        echo Template::render('template-parts/pm-views/'.$view.'.php', $item);
+    }
+    $Output->html['slider-result'] = ob_get_contents();
     ob_end_clean();
     $Output->error = false;
     $result = json_encode($Output);
@@ -99,6 +127,7 @@ if (empty($_GET['action'])) {
     echo $result;
     exit;
 } else if ($_GET['action'] == 'autocomplete') {
+    $args = Search::getResult($_GET,2, 12, true, false, TS_TTL_FILTER, TS_TTL_SEARCH);
     ob_start();
     require 'template-parts/pm-search/autocomplete.php';
     $output = ob_get_contents();
@@ -183,6 +212,7 @@ if (empty($_GET['action'])) {
     }
     $result = json_encode($r);
     echo $result;
+    exit;
     exit;
 }else{
     header("HTTP/1.0 400 Bad Request");

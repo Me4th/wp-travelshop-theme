@@ -1,6 +1,7 @@
 <?php
 /**
  * @var object $settings defined by beaver builder module
+ * @var object $module defined by beaver builder module
  */
 
 $args = [];
