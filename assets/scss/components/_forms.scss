@@ -48,6 +48,10 @@
 	}
 }
 
+.travelshop-datepicker-input {
+	background: #fff !important;
+}
+
 .form-check {
 	@include noselect();
 }
@@ -135,7 +139,8 @@ button.select-from-control {
 		}
 	}
 
-	.dropdown-clear {
+	.dropdown-clear,
+	.dropdown-icon {
 		position: absolute;
 		right: 0.5rem;
 		top: 50%;
@@ -147,6 +152,11 @@ button.select-from-control {
 		line {
 			pointer-events: none;
 		}
+	}
+
+	.dropdown-icon {
+		display: block;
+		stroke: #444;
 	}
 
 	i.la {
