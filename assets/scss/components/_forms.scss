@@ -50,6 +50,7 @@
 
 .travelshop-datepicker-input {
 	background: #fff !important;
+	cursor: pointer;
 }
 
 .form-check {
@@ -179,6 +180,7 @@ button.select-from-control {
 }
 
 .form-group.category-tree {
+	margin-bottom: 1rem;
 	.dropdown-menu.dropdown-menu-select {
 		top: 100% !important;
 		transform: translate(0,0) !important;

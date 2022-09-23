@@ -6,13 +6,43 @@
 }
 #booking-filter-mobile {
 	margin-top: 1rem;
+	flex: 1;
 }
 #booking-filter {
+	min-height: 100%;
 	@include media-breakpoint-up(md) {
 		padding: 0 1.2rem 0 1.2rem;
 		margin: 0 -2rem;
 	}
 	@include media-breakpoint-down(md) {
+		.filter-form-mobile {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+			min-height: 100%;
+			flex: 1;
+			.filter-inputs {
+				width: 100%;
+				overflow-y: auto;
+				flex: 1;
+			}
+			.filter-control {
+				min-width: 350px;
+				.btn {
+					display: block;
+					width: auto;
+					font-size: 1rem;
+					padding: .4rem 1rem;
+					&:first-child {
+						margin: 1rem 1rem .5rem 1rem;
+					}
+					&:last-child {
+						margin: .5rem 1rem 0rem 1rem;
+					}
+				}
+			}
+		}
 		position: fixed;
 		top: auto;
 		bottom: 1.25rem;
@@ -55,24 +85,56 @@
 		}
 	}
 }
+#booking-offers {
+	padding-bottom: 2rem;
+	.month-name,
+	.additional-offers {
+		@include media-breakpoint-down(md) {
+			background: #ececec;
+			padding: .5rem 0rem;
+			margin-bottom: -1rem;
+			h2 {
+				font-size: 1.1rem;
+				margin: 0;
+			}
+		}
+	}
+	.additional-offers {
+		@include media-breakpoint-down(md) {
+			margin-top: .25rem;
+		}
+	}
+}
 #booking-filter .filter-form {
 	@include media-breakpoint-down(md) {
 		padding: 0 1rem;
 		.filter-switch {
 			display: flex !important;
+			justify-content: center;
 			align-items: center;
-			font-size: 1.4rem;
-			padding: .25rem .5rem;
-			background: #dfe6e9;
-			border-radius: 5px;
-			margin-bottom: .5rem;
+			font-size: 1.15rem;
+			padding: .5rem 1rem .5rem 1rem;
+			border-bottom: .75rem solid #234f91;
+			background: #06f;
+			color: #fff;
+			border-radius: 0;
+			margin-bottom: 0;
 			cursor: pointer;
+			position: fixed;
+			bottom: -1px;
+			right: 0;
+			left: 0;
+			min-width: 100%;
 			* {
 				pointer-events: none;
 			}
+			svg {
+				width: 25px;
+				height: 25px;
+				stroke: #fff;
+			}
 			span {
 				margin-right: .25rem;
-				transform: translateY(-1px);
 			}
 		}
 		>* {
@@ -87,13 +149,14 @@
 	position: sticky;
 	top: -5px;
 	z-index: 25;
-	margin: 0 -1rem;
+	margin: 0 -1.25rem;
 
-	@include media-breakpoint-up(md) {
+	@include media-breakpoint-up(lg) {
 		top: -1.25rem;
 		background: #fff;
-		padding: .5rem 1rem;
+		padding: 1rem;
 		box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+		margin: 0 -1.25rem 2rem -1.25rem;
 		.filter-switch {
 			display: none;
 		}
@@ -140,7 +203,6 @@
 }
 
 .content-block.content-block-detail-booking {
-	border-top: 1px solid $gray-200;
 	padding: 0;
 
 	.booking-button-wrap {
@@ -187,6 +249,25 @@
 				display: none;
 			}
 			&.checked {
+				position: relative;
+				padding-top: 2.5rem;
+				&:before {
+					content: 'Ihr gewähltes Angebot';
+					display: block;
+					background: #27ae60;
+					color: #fff;
+					padding: .5rem 1rem;
+					font-size: .8rem;
+					position: absolute;
+					font-weight: bold;
+					// text-transform: uppercase;
+					letter-spacing: .01rem;
+					top: 0;
+					left: 0;
+					right: 0;
+					border-top-right-radius: 4px;
+					border-top-left-radius: 4px;
+				}
 				.icon-tabler-circle-check {
 					display: inline-block;
 				}
@@ -215,15 +296,12 @@
 
 			.icon-tabler-circle-check {
 				position: absolute;
-				top: 0.75rem;
-				right: 1rem;
+				top: 0;
+				right: 0;
 				z-index: 200;
-
-				@include media-breakpoint-up(lg) {
-					top: 0;
-					right: 0;
-					transform: translate(50%, -50%);
-				}
+				height: 35px;
+				width: 35px;
+				stroke-width: 2.5;
 			}
 
 			.discount-wrapper {

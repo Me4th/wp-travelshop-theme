@@ -10,9 +10,9 @@ use \Pressmind\Travelshop\PriceHandler;
 use \Pressmind\Travelshop\IB3Tools;
 use \Pressmind\Travelshop\Template;
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(0);
 
 define('DOING_AJAX', true);
 require_once 'vendor/autoload.php';
@@ -155,6 +155,7 @@ if (empty($_GET['action']) && !empty($_POST['action'])) {
         $filters->date_from = null;
         $filters->date_to = null;
     }
+
     !empty($_GET['pm-tt']) && $_GET['pm-tt'] != 'false' ? $filters->transport_types = explode(',', strtoupper($_GET['pm-tt'])) : $filters->transport_types = null;
     !empty($_GET['pm-ap']) && $_GET['pm-ap'] != 'false' ? $filters->transport_1_airport = explode(',', strtoupper($_GET['pm-ap'])) : $filters->airports = null;
     if(!empty($_GET['pm-du']) && $_GET['pm-du'] != 'false') {
@@ -169,14 +170,42 @@ if (empty($_GET['action']) && !empty($_POST['action'])) {
     !empty($_GET['price_to']) ? $filters->price_to = $_GET['price_to'] : '';
     !empty($_GET['pm-ho']) ? $filters->occupancies = [$_GET['pm-ho']] : '';
     $args['booking_offers'] = $args['media_object']->getCheapestPrices(!empty($filters) ? $filters : null, ['date_departure' => 'ASC', 'price_total' => 'ASC'], $limit);
+    $args['hide_month'] = false;
+
+    if(isset($_GET['pm-oid']) && $_GET['pm-oid'] != 'undefined') {
+        $filterNew = new stdClass();
+        $filterNew->id_option = null;
+        $filterNew->id_date = null;
+        $filterNew->id_booking_package = null;
+        $filterNew->id_housing_package = null;
+        $filterNew->date_from = null;
+        $filterNew->date_to = null;
+        $filterNew->transport_types = null;
+        $filterNew->id = $_GET['pm-oid'];
+        $selectedDate = $args['media_object']->getCheapestPrices(!empty($filterNew) ? $filterNew : null, null, [0,1]);
+        if(!empty($selectedDate)) {
+            $found = false;
+            for ($i = 0; $i < 3; ++$i) {
+                if(isset($args['booking_offers'][$i]) && $args['booking_offers'][$i]->getId() == $selectedDate[0]->getId()) {
+                    $found = true;
+                }
+            }
+            if(!$found) {
+                $args['hide_month'] = true;
+                array_unshift($args['booking_offers'], $selectedDate[0]);
+            }
+        }
+    }
+
     $Output->total = count($args['booking_offers']);
 
-    if(!empty($_GET['type']) && $_GET['type'] = 'infinity') {
+    if(!empty($_GET['type']) && $_GET['type'] == 'infinity') {
         ob_start();
         require 'template-parts/pm-views/detail-blocks/booking-offers-ajax-infinityload.php';
         $Output->html['offer-section'] = ob_get_contents();
         ob_end_clean();
     } else {
+        $args['cheapest_price_id'] = isset($selectedDate) ? $selectedDate[0]->getId() : 999;
         ob_start();
         require 'template-parts/pm-views/detail-blocks/booking-offers-ajax.php';
         $Output->html['booking-offers'] = ob_get_contents();

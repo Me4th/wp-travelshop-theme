@@ -22,20 +22,20 @@ use Pressmind\Travelshop\Template;
                     <div class="content-block-detail-booking-inner">
                         <?php
                         $current_month = null;
-                        foreach ($args['booking_offers'] as $offer) {
-
+                        foreach ($args['booking_offers'] as $key => $offer) {
                             if($current_month != $offer->date_departure->format('Y-m')){
                                 $current_month = $offer->date_departure->format('Y-m');
-                                ?>
+                                $checked = $args['cheapest_price_id'] == $offer->getId(); ?>
 
-                                <div class="booking-row no-gutters row booking-row-head d-none d-lg-flex">
-                                    <div class="col-12">
-                                        <h2><?php
-                                            echo Template::render(APPLICATION_PATH . '/template-parts/micro-templates/month-name.php', [
-                                                'date' => $offer->date_departure]);
-                                            ?></h2>
+                                <?php if(($key != 0 && $args['hide_month'] == false) || $key == 0 && !$checked) { ?>
+                                    <div class="booking-row no-gutters row booking-row-head d-flex month-name">
+                                        <div class="col-12">
+                                             <h2><?php echo Template::render(APPLICATION_PATH . '/template-parts/micro-templates/month-name.php', [
+                                                    'date' => $offer->date_departure]); ?></h2>
+                                        </div>
                                     </div>
-                                </div>
+                                <?php } ?>
+
                                 <div class="booking-row no-gutters row booking-row-head d-none d-lg-flex">
                                     <div class="col-2">
                                         Dauer
@@ -58,11 +58,6 @@ use Pressmind\Travelshop\Template;
                                 </div>
 
                             <?php } ?>
-                            <?php
-
-
-                            $checked = false; //($args['cheapest_price']->id == $offer->getId());
-                            ?>
                             <div data-id-offer="<?php echo $offer->getId(); ?>" data-duration="<?php echo $offer->duration; ?>" data-airport="<?php echo $offer->transport_1_airport; ?>" class="booking-row no-gutters row booking-row-date<?php echo $checked ? ' checked' : ''; ?>">
                                 <?php
                                 echo Template::render(APPLICATION_PATH.'/template-parts/micro-templates/checked-icon.php', []);
@@ -119,6 +114,15 @@ use Pressmind\Travelshop\Template;
                                     </div>
                                 </div>
                             </div>
+
+                            <?php if($key == 0 && count($args['booking_offers']) > 1 && $checked) { ?>
+                                <div class="booking-row no-gutters row booking-row-head d-flex additional-offers">
+                                    <div class="col-12">
+                                        <h2><?php echo Template::render(APPLICATION_PATH . '/template-parts/micro-templates/month-name.php', [
+                                                'date' => $args['booking_offers'][$key + 1]->date_departure]); ?></h2>
+                                    </div>
+                                </div>
+                            <?php } ?>
 
                         <?php } ?>
 

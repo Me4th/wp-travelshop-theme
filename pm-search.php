@@ -11,7 +11,7 @@ get_header();
     $args['headline'] = 'Finde deine Traumreise!';
     $args['search_box'] = 'default_search_box';
     $args['search_box_tab'] = 0;
-    load_template_transient(get_template_directory() . '/template-parts/layout-blocks/search-header.php', false, $args);
+    load_template(get_template_directory() . '/template-parts/layout-blocks/search-header.php', false, $args);
     $request = array_merge($_GET, ['pm-ot' => $wp_query->get('pm-ot')]);
     $output = null;
     $view = 'Teaser1';
@@ -31,7 +31,7 @@ get_header();
                     <nav id="search-filter">
                         <?php
                             // this content will be replaced by ajax during the search, @see travelshop/assets/js/ajax.js
-                            load_template_transient(get_template_directory() . '/template-parts/pm-search/filter-vertical.php', false, $result);
+                            load_template(get_template_directory() . '/template-parts/pm-search/filter-vertical.php', false, $result);
                             ?>
                     </nav>
                 </div>
@@ -39,7 +39,7 @@ get_header();
                     <div id="search-result">
                         <?php
                             // this content will be replaced by ajax during the search, @see travelshop/assets/js/ajax.js
-                            load_template_transient(get_stylesheet_directory() . '/template-parts/pm-search/result.php', false, $result);
+                            load_template(get_stylesheet_directory() . '/template-parts/pm-search/result.php', false, $result);
                             ?>
                     </div>
                 </div>

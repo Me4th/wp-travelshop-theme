@@ -5307,8 +5307,19 @@ a.close.disabled {
 
 .modal-body {
   position: relative;
+  min-height: 100%;
+  justify-content: center;
   flex: 1 1 auto;
   padding: 1rem;
+}
+@media (max-width: 991.98px) {
+  .modal-body {
+    display: flex;
+  }
+}
+
+.modal-body-outer {
+  overflow-x: hidden;
 }
 
 .modal-footer {
@@ -10891,7 +10902,7 @@ Build date: 2018-12-12 00:07:25
   border-radius: 4px;
 }
 
-.daterangepicker td.active, .daterangepicker td.active:hover {
+.daterangepicker td.active:not(.ends), .daterangepicker td.active:not(.ends):hover {
   background-color: #357ebd;
   border-color: transparent;
   color: #fff !important;
@@ -11117,6 +11128,10 @@ Creates a strike trough price
 */
 hr {
   border-top: rgba(0, 0, 0, 0.125) 1px solid;
+}
+
+input::placeholder {
+  color: #495057 !important;
 }
 
 /**
@@ -11598,6 +11613,7 @@ hr {
 
 .travelshop-datepicker-input {
   background: #fff !important;
+  cursor: pointer;
 }
 
 .form-check {
@@ -11718,6 +11734,9 @@ button.select-from-control i.la {
   transform: rotate(180deg);
 }
 
+.form-group.category-tree {
+  margin-bottom: 1rem;
+}
 .form-group.category-tree .dropdown-menu.dropdown-menu-select {
   top: 100% !important;
   transform: translate(0, 0) !important;

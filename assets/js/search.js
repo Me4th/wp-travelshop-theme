@@ -9,7 +9,6 @@ jQuery(function ($) {
         $(this).parent().toggleClass('is--open');
     });
 
-
     // Filter toggle
     $('.list-filter-close').on('click', function (e) {
         e.preventDefault();
