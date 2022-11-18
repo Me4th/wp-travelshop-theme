@@ -38,6 +38,13 @@ foreach (Info::STATIC_MODELS as $model_name) {
                     case 'create_column':
                         addDatabaseTableColumn($object->getDbTableName(), $difference['column_name'], $difference['column_type'], $difference['column_null']);
                         break;
+                    case 'drop_column':
+                        dropColumn($object->getDbTableName(), $difference['column_name']);
+                        break;
+                }
+            }
+            foreach ($check as $difference) {
+                switch($difference['action']) {
                     case 'remove_auto_increment':
                         removeAutoIncrement($object->getDbTableName(), $difference['column_name'], $difference['column_type'], $difference['column_null']);
                         break;
@@ -49,9 +56,6 @@ foreach (Info::STATIC_MODELS as $model_name) {
                         break;
                     case 'alter_primary_key':
                         alterPrimaryKey($object->getDbTableName(), $difference['column_names'], $difference['old_column_names']);
-                        break;
-                    case 'drop_column':
-                        dropColumn($object->getDbTableName(), $difference['column_name']);
                         break;
                 }
             }
@@ -134,49 +138,49 @@ function isArrayAssociative($array) {
 }
 
 function modifyDatabaseTableColumn($tableName, $columnName, $type, $is_null = 'NULL') {
-    $sql = 'ALTER TABLE ' . $tableName . ' MODIFY ' . $columnName . ' ' . $type . ' ' . $is_null;
+    $sql = 'ALTER TABLE ' . $tableName . ' MODIFY `' . $columnName . '` ' . $type . ' ' . $is_null;
     $db = Registry::getInstance()->get('db');
     echo $sql . "\n";
     $db->execute($sql);
 }
 
 function addDatabaseTableColumn($tableName, $columnName, $type, $is_null = 'NULL') {
-    $sql = 'ALTER TABLE ' . $tableName . ' ADD ' . $columnName . ' ' . $type . ' ' . $is_null;
+    $sql = 'ALTER TABLE ' . $tableName . ' ADD `' . $columnName . '`  ' . $type . ' ' . $is_null;
     $db = Registry::getInstance()->get('db');
     echo $sql . "\n";
     $db->execute($sql);
 }
 
 function modifyDatabaseTableNull($tableName, $columnName, $type, $is_null) {
-    $sql = 'ALTER TABLE ' . $tableName . ' MODIFY ' . $columnName . ' ' . $type . ' ' . $is_null;
+    $sql = 'ALTER TABLE ' . $tableName . ' MODIFY `' . $columnName . '` ' . $type . ' ' . $is_null;
     $db = Registry::getInstance()->get('db');
     echo $sql . "\n";
     $db->execute($sql);
 }
 
 function addAutoIncrement($tableName, $columnName, $type, $is_null) {
-    $sql = 'ALTER TABLE ' . $tableName . ' MODIFY ' . $columnName . ' ' . $type . ' ' . $is_null . ' auto_increment';
+    $sql = 'ALTER TABLE ' . $tableName . ' MODIFY `' . $columnName . '` ' . $type . ' ' . $is_null . ' auto_increment';
     $db = Registry::getInstance()->get('db');
     echo $sql . "\n";
     $db->execute($sql);
 }
 
 function removeAutoIncrement($tableName, $columnName, $type, $is_null) {
-    $sql = 'ALTER TABLE ' . $tableName . ' MODIFY ' . $columnName . ' ' . $type . ' ' . $is_null;
+    $sql = 'ALTER TABLE ' . $tableName . ' MODIFY `' . $columnName . '` ' . $type . ' ' . $is_null;
     $db = Registry::getInstance()->get('db');
     echo $sql . "\n";
     $db->execute($sql);
 }
 
 function dropColumn($tableName, $columnName) {
-    $sql = 'ALTER TABLE ' . $tableName . ' DROP ' . $columnName;
+    $sql = 'ALTER TABLE ' . $tableName . ' DROP `' . $columnName . '`';
     $db = Registry::getInstance()->get('db');
     echo $sql . "\n";
     $db->execute($sql);
 }
 
 function addIndex($tableName, $columnNames, $indexName) {
-    $sql = "CREATE INDEX " . $indexName . " ON " . $tableName . " (" . implode(',' , $columnNames) . ")";
+    $sql = "CREATE INDEX " . $indexName . " ON " . $tableName . " (`" . implode('`,' , $columnNames) . "`)";
     $db = Registry::getInstance()->get('db');
     echo $sql . "\n";
     $db->execute($sql);
