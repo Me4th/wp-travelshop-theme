@@ -9,6 +9,18 @@ use Pressmind\Log\Writer;
 use Pressmind\ORM\Object\MediaObject;
 use Pressmind\REST\Controller\System;
 
+$args = $argv;
+$args[1] = isset($argv[1]) ? $argv[1] : null;
+if($matches = preg_grep("/^\-c\=/", $args)){
+    $config_file = trim(substr(reset($matches), 3));
+    if(!file_exists('../'.$config_file)){
+        echo "error: file does not exist".'../'.$config_file."\n";
+        exit;
+    }
+    putenv('PM_CONFIG='.$config_file);
+    echo "pm-config loaded: ".getenv('PM_CONFIG')."\n";
+}
+
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 function find_wordpress_base_path()
@@ -31,9 +43,6 @@ require_once($wp_path . 'wp-load.php');
 require_once($wp_path . 'wp-admin/includes/admin.php');
 
 global $wp, $wp_query, $wp_the_query, $wp_rewrite, $wp_did_header;
-
-$args = $argv;
-$args[1] = isset($argv[1]) ? $argv[1] : null;
 
 if(in_array('debug', $args)){
     define('PM_SDK_DEBUG', true);
@@ -227,6 +236,7 @@ switch ($args[1]) {
         $helptext = "usage: import.php [fullimport | mediaobject | itinerary | objecttypes | remove_orphans | destroy | depublish | update_tags] [<single id or commaseparated list of ids>] [debug]\n";
         $helptext .= "Example usages:\n";
         $helptext .= "php import.php fullimport\n";
+        $helptext .= "php import.php fullimport -c=pm-config-example.php <loads the defined config>\n";
         $helptext .= "php import.php mediaobject 12345,12346  <single/multiple ids allowed  / imports one or more media objects>\n";
         $helptext .= "php import.php objecttypes 12345,12346  <single/multiple ids allowed / imports media objects by given object types>\n";
         $helptext .= "php import.php itinerary 12345,12346    <single/multiple ids allowed / imports itineraries for the given media object types>\n";
