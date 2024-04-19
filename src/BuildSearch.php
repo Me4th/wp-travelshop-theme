@@ -447,7 +447,7 @@ class BuildSearch
 
         $allowed_orders = array(
             'rand', 'price-desc', 'price-asc', 'date_departure-asc', 'date_departure-desc',
-            'score-asc', 'score-desc', 'recommendation_rate-asc', 'recommendation_rate-desc', 'priority', 'list'
+            'score-asc', 'score-desc', 'recommendation_rate-asc', 'recommendation_rate-desc', 'priority', 'list', 'valid_from-asc', 'valid_from-desc'
         );
         if (empty($request[$prefix.'-o']) === false && in_array($request[$prefix.'-o'], $allowed_orders) === true) {
 
@@ -462,7 +462,6 @@ class BuildSearch
                 $property = $property == 'price' ? 'price_total' : $property;
                 $order = array($property => $direction);
             }
-
             $validated_search_parameters[$prefix.'-o'] = $request[$prefix.'-o'];
         }
 

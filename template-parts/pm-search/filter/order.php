@@ -32,6 +32,8 @@
             <option value="date_departure-desc"<?php echo $args['order'] == 'date_departure-desc' ? ' selected' : '';?>>späteste Abreise</option>
             <option value="price-asc"<?php echo $args['order'] == 'price-asc' ? ' selected' : '';?>>niedrigster Preis</option>
             <option value="price-desc"<?php echo $args['order'] == 'price-desc' ? ' selected' : '';?>>höchster Preis</option>
+            <option value="valid_from-asc"<?php echo $args['order'] == 'valid_from-asc' ? ' selected' : '';?>>Verkaufsstart aufsteigend</option>
+            <option value="valid_from-desc"<?php echo $args['order'] == 'valid_from-desc' ? ' selected' : '';?>>Verkaufsstart absteigend</option>
             <option value="recommendation_rate-desc"<?php echo $args['order'] == 'recommendation_rate-desc' ? ' selected' : '';?>>beste Weiterempfehlung</option>
         </select>
     </div>
