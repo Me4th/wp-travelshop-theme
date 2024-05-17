@@ -78,7 +78,7 @@ if($request->isGet()) {
             if(empty($detail_url)){
                 $url = WEBSERVER_HTTP.'/id/'.$request->getParameter('id_media_object').'?preview=1&no_cache='.uniqid();
             }else{
-                $url = WEBSERVER_HTTP.$detail_url.'?preview=1&no_cache='.uniqid();
+                $url = WEBSERVER_HTTP.$detail_url.'?pm_preview=1&no_cache='.uniqid();
             }
             if($request->getParameter('preview') == "1") {
                 $config = Registry::getInstance()->get('config');

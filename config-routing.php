@@ -30,8 +30,11 @@ if (MULTILANGUAGE_SITE) {
 // - DETAIL PAGE ROUTE -
 // Build a route for each primary media object type > detailpage <
 // e.g. www.xxx.de/reise/reisename/
-foreach ($config['data']['media_types_pretty_url'] as $object_type => $pretty_url) {
-    if (!empty($config['data']['primary_media_type_ids']) && !in_array($object_type, $config['data']['primary_media_type_ids'])) {
+foreach ($config['data']['media_types_pretty_url'] as $pretty_url) {
+    if(empty($pretty_url['id_object_type'])){
+        exit('Error: please add id_object_type and language to data.media_types_pretty_url[] in pm-config.php (and update the pressmind sdk)');
+    }
+    if (!empty($config['data']['primary_media_type_ids']) && !in_array($pretty_url['id_object_type'], $config['data']['primary_media_type_ids'])) {
         continue;
     }
     $language_prefix = '';
@@ -41,7 +44,7 @@ foreach ($config['data']['media_types_pretty_url'] as $object_type => $pretty_ur
     $route_prefix = $language_prefix . trim($pretty_url['prefix'], '/');
     $routename = 'ts_default_' . $route_prefix . '_route';
     $data = [];
-    $data['id_object_type'] = $object_type;
+    $data['id_object_type'] = $pretty_url['id_object_type'];
     $data['type'] = 'detail';
     $data['language'] = empty($pretty_url['language']) ? null: $pretty_url['language'];
     $data['base_url'] = $route_prefix;
@@ -142,7 +145,7 @@ function ts_detail_hook($data)
             exit('route type not valid');
         }
         $preview_date = null;
-        if(!empty($_GET['preview'])){
+        if(!empty($_GET['preview']) || !empty($_GET['pm_preview'])){
             $preview_date = new DateTime();
         }
         $r = Search::getResult($q, null, 10, false, false, null, null, null, $preview_date, [], [30,60]);
@@ -156,7 +159,7 @@ function ts_detail_hook($data)
         $is_hidden = false;
         foreach ($r['items'] as $i) {
             $mediaObject = new Pressmind\ORM\Object\MediaObject($i['id_media_object'], false, (!empty($_GET['no_cache']) || !empty($_GET['update_cache'])));
-            if(empty($_GET['preview']) && !in_array($mediaObject->visibility, [30,60])) {
+            if((empty($_GET['preview']) && empty($_GET['pm_preview'])) && !in_array($mediaObject->visibility, [30,60])) {
                 continue;
             }
             $id_media_objects[] = $i['id_media_object'];

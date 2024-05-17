@@ -5,6 +5,7 @@ error_reporting(-1);
 ini_set('display_errors', 'On');
 
 use Exception;
+use Pressmind\Import\CategoryTree;
 use Pressmind\Log\Writer;
 use Pressmind\ORM\Object\MediaObject;
 use Pressmind\REST\Controller\System;
@@ -22,6 +23,7 @@ if($matches = preg_grep("/^\-c\=/", $args)){
 }
 
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
+
 
 function find_wordpress_base_path()
 {
@@ -42,9 +44,10 @@ define('WP_USE_THEMES', false);
 require_once($wp_path . 'wp-load.php');
 require_once($wp_path . 'wp-admin/includes/admin.php');
 
+ini_set('max_execution_time', 0);
+ini_set('memory_limit', '-1');
 error_reporting(-1);
 ini_set('display_errors', 'On');
-ini_set('max_execution_time', 0);
 
 global $wp, $wp_query, $wp_the_query, $wp_rewrite, $wp_did_header;
 
@@ -232,6 +235,7 @@ switch ($args[1]) {
                 }
             }
         }
+        break;
     case 'calendar':
         if(!empty($args[2])) {
             Writer::write('Regenerate calendars for mediaobject ID(s): ' . $args[2], Writer::OUTPUT_BOTH, 'import', Writer::TYPE_INFO);
@@ -239,7 +243,7 @@ switch ($args[1]) {
             foreach ($ids as $id) {
                 try {
                     $media_object = new MediaObject($id);
-                    $media_object->insertCheapestPrice();
+                    $media_object->insertCheapestPrice(); // TODO?!!
                     $media_object->createMongoDBCalendar();
                     Writer::write('Mediaobject calendars for ' . $id . ' successfully regenerated', Writer::OUTPUT_BOTH, 'import', Writer::TYPE_INFO);
                 } catch (Exception $e) {
@@ -248,6 +252,7 @@ switch ($args[1]) {
                 }
             }
         }
+        break;
     case 'postimport':
         Writer::write('Running post import', Writer::OUTPUT_BOTH, 'import', Writer::TYPE_INFO);
         try {
@@ -263,11 +268,26 @@ switch ($args[1]) {
             echo "WARNING: post import failed:\n" . $e->getMessage() . "\nSEE " . Writer::getLogFilePath() . DIRECTORY_SEPARATOR . "import_error.log for details\n";
         }
         break;
+    case 'categories':
+        Writer::write('Import CategoryTrees', Writer::OUTPUT_BOTH, 'import', Writer::TYPE_INFO);
+        try {
+            $ids = [];
+            if(!empty($args[2])) {
+                $ids = array_map('trim', explode(',', $args[2]));
+            }
+            $CategoryImporter = new CategoryTree($ids);
+            $CategoryImporter->import();
+            Writer::write('Import completed', Writer::OUTPUT_BOTH, 'import', Writer::TYPE_INFO);
+        } catch (Exception $e) {
+            Writer::write($e->getMessage(), Writer::OUTPUT_BOTH, 'import', Writer::TYPE_ERROR);
+            echo "WARNING: CategoryTree import failed:\n" . $e->getMessage() . "\nSEE " . Writer::getLogFilePath() . DIRECTORY_SEPARATOR . "import_error.log for details\n";
+        }
+        break;
     case 'help':
     case '--help':
     case '-h':
     default:
-        $helptext = "usage: import.php [fullimport | mediaobject | itinerary | objecttypes | remove_orphans | destroy | depublish | update_tags] [<single id or commaseparated list of ids>] [debug]\n";
+        $helptext = "usage: import.php [fullimport | mediaobject | itinerary | objecttypes | remove_orphans | destroy | depublish | update_tags | offer | calendar | remove_orphans | update_tags | postimport | categories] [<single id or commaseparated list of ids>] [debug]\n";
         $helptext .= "Example usages:\n";
         $helptext .= "php import.php fullimport\n";
         $helptext .= "php import.php fullimport -c=pm-config-example.php <loads the defined config>\n";
@@ -280,7 +300,8 @@ switch ($args[1]) {
         $helptext .= "php import.php calendar 12345,12346    <single/multiple ids allowed / recalculates offers/cheapestPrices\n";
         $helptext .= "php import.php remove_orphans           <removes all orphans from the database that are not delivered by the pressmind api>\n";
         $helptext .= "php import.php update_tags 12345        <single media object type id required>\n";
-
+        $helptext .= "php import.php postimport 12345        <single/multiple ids allowed but optional / runs the post import routine (image_processors and triggers custom_post_import_hooks scripts if configured)> \n";
+        $helptext .= "php import.php categories 123,124       <single/multiple ids allowed / imports all category trees> \n";
         echo $helptext;
 }
 

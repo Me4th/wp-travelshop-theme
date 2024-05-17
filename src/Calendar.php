@@ -59,30 +59,4 @@ class Calendar
 
     }
 
-    /**
-     * @deprecated (but still in use and no replacement yet)
-     * @return array
-     * @throws \Exception
-     */
-    public static function getTravelMonthRanges($occupancies = [2]){
-        $db = \Pressmind\Registry::getInstance()->get('db');
-        $items = $db->fetchAll('select min(date_departure) as min_date,
-                                group_concat(id_media_object) as id_media_objects
-                                FROM pmt2core_cheapest_price_speed
-                                where date_departure > now()
-                                and option_occupancy in("'.implode('","', $occupancies).'")
-                                GROUP BY YEAR(date_departure)*100 + MONTH(date_departure);'
-        );
-        $output = [];
-        foreach($items as $item){
-            $date = new \DateTime($item->min_date);
-            $output[] = [
-                'from' => new \DateTime($date->format('Y-m-01')),
-                'to' => new \DateTime($date->format('Y-m-t')),
-                'id_media_objects' => array_unique(explode(',', $item->id_media_objects))
-            ];
-        }
-        return $output;
-    }
-
 }

@@ -15,6 +15,12 @@ class Filter
     public $mediaObject = null;
 
     /**
+     * Agency ID
+     * @var string
+     */
+    public $agency = null;
+
+    /**
      * This filter is created to use in
      * mongodb search index creation context
      * @param $str

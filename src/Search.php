@@ -50,7 +50,7 @@ class Search
         if (empty($request['pm-ho']) === true && !empty($occupancy)) {
             // if the price duration slider is active, we have to set the housing occupancy search
             // (to display the correct search result with the correct cheapest price inside)
-            $request['pm-ho'] = $occupancy;
+            $request['pm-ho'] = is_array($occupancy) ? implode(',', $occupancy) : $occupancy;
         }
         $id_object_type = empty($request['pm-ot']) ? false : \BuildSearch::extractObjectType($request['pm-ot']);
         $order = empty($request['pm-o']) ? 'price-asc' : $request['pm-o'];
@@ -256,6 +256,7 @@ class Search
         if(TS_CALENDAR_SHOW_DEPARTURES === true && empty($result_filter) === false){
             $start_time = microtime(true);
             $filter_departures = [];
+            $filter_months = [];
             foreach ($result_filter->documents as $document) {
                 $document = json_decode(json_encode($document), true);
                 if (!empty($document['prices']['date_departures'])) {
@@ -273,9 +274,27 @@ class Search
                             $filter_departures[$date_departure->format('Y-m-d')]->count_in_search = 0;
                             $filter_departures[$date_departure->format('Y-m-d')]->date = $date_departure->format('Y-m-d');
                         }
+                        $fst_day_in_month = clone $date_departure;
+                        $fst_day_in_month->modify('first day of this month');
+                        if(isset($filter_months[$fst_day_in_month->format('Y-m-d')])){
+                            $filter_months[$fst_day_in_month->format('Y-m-d')]->count_in_system++;
+                            $filter_months[$fst_day_in_month->format('Y-m-d')]->date = $fst_day_in_month;
+                            $filter_months[$fst_day_in_month->format('Y-m-d')]->ids[] = $document['id_media_object'];
+                            $filter_months[$fst_day_in_month->format('Y-m-d')]->ids = array_unique($filter_months[$fst_day_in_month->format('Y-m-d')]->ids);
+                        }else{
+                            $filter_months[$fst_day_in_month->format('Y-m-d')] = new \stdClass();
+                            $filter_months[$fst_day_in_month->format('Y-m-d')]->date = $fst_day_in_month;
+                            $filter_months[$fst_day_in_month->format('Y-m-d')]->count_in_system = 1;
+                            $filter_months[$fst_day_in_month->format('Y-m-d')]->count_in_search = 0;
+                            $filter_months[$fst_day_in_month->format('Y-m-d')]->ids = [$document['id_media_object']];
+                        }
                     }
                 }
             }
+            $filter_months = array_values($filter_months);
+            usort($filter_months, function($a, $b) {
+                return $a->date <=> $b->date;
+            });
 
             if(!$returnFiltersOnly) {
                 foreach ($result->documents as $document) {
@@ -289,6 +308,9 @@ class Search
                             if (isset($filter_departures[$date_departure->format('Y-m-d')])) {
                                 $filter_departures[$date_departure->format('Y-m-d')]->count_in_search++;
                             }
+                            if (isset($filter_months[$date_departure->format('Y-m-01')])) {
+                                $filter_months[$date_departure->format('Y-m-01')]->count_in_search++;
+                            }
                         }
                     }
                 }
@@ -298,13 +320,6 @@ class Search
             });
             $end_time = microtime(true);
             $departure_filter_ms = ($end_time - $start_time)  * 1000;
-
-
-           // echo '<pre>';
-           // print_r($filter_departures);
-           // echo '</pre>';
-           // exit;
-//
         }
 
         $result = [
@@ -329,6 +344,7 @@ class Search
             'price_min' => !empty($result_filter->minPrice) ? $result_filter->minPrice  : null,
             'price_max' => !empty($result_filter->maxPrice) ? $result_filter->maxPrice : null,
             'departure_dates' => !empty($filter_departures) ? $filter_departures : null,
+            'months' => !empty($filter_months) ? $filter_months : null,
             'items' => $items,
             'mongodb' => [
                 'duration_filter_ms' => $duration_filter_ms,
