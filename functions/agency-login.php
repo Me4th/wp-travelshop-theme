@@ -16,7 +16,7 @@ if (isset($_COOKIE['id_user'])) {
     require_once($wp_path . 'wp-load.php');
     require_once($wp_path . 'wp-admin/includes/admin.php');
 
-    $user = wp_signon(['user_login' => 'TSAgency', 'user_password' => 'CKX0JmnGsaiLjGAu$2w#xMj*BmvP$v', 'remember' => true]);
+    $user = wp_signon(['user_login' => TS_AGENCY_DEFAULT_USER, 'user_password' => TS_AGENCY_DEFAULT_USER_PW, 'remember' => true]);
     if ( is_wp_error($user) ) {
         echo json_encode(['success' => 'false']);
     } else {

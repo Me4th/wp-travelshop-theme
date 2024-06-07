@@ -302,10 +302,13 @@ if($args[1] != 'only_static') {
         $ids = [];
         $client = new Client();
         $response = $client->sendRequest('ObjectType', 'getAll');
+        if(empty($response->result) || !is_array($response->result)){
+            Writer::write('Error: ObjectType Request has a zero result' . $item->type_name, Writer::OUTPUT_BOTH, 'install', Writer::TYPE_ERROR);
+            exit;
+        }
         $media_types = [];
         $media_types_pretty_url = [];
         $media_types_allowed_visibilities = [];
-
         $searchroutes = [];
         $theme_config = [];
         $type_map = [
@@ -328,9 +331,10 @@ if($args[1] != 'only_static') {
                 'fields' => ['name' => 'name'],
                 'strategy' => 'count-up',
                 'suffix' => '/',
-                'language' => null
+                'language' => 'de',
+                'id_object_type' => $item->id_type,
             ];
-            $media_types_pretty_url[$item->id_type] = $pretty_url;
+            $media_types_pretty_url[] = $pretty_url;
             $media_types_allowed_visibilities[$item->id_type] = [30];
 
             if(isset($type_map[$item->gtxf_product_type])){
@@ -379,7 +383,10 @@ if($args[1] != 'only_static') {
         $mongodb_search_categories = [];
         $mongodb_search_descriptions = [];
         $mongodb_search_build_for= [];
-
+        if(!empty($response->result->error)){
+            Writer::write('Error: '.$response->result->msg, Writer::OUTPUT_BOTH, 'install', Writer::TYPE_ERROR);
+            exit;
+        }
         foreach ($response->result as $item) {
 
             if(empty($item->gtxf_product_type)){
@@ -548,7 +555,6 @@ if($args[1] != 'only_static') {
             $config['data']['search_mongodb']['search']['categories'] = $mongodb_search_categories;
             $config['data']['search_mongodb']['search']['categories'] = $mongodb_search_categories;
             $config['data']['search_mongodb']['search']['build_for'] = $mongodb_search_build_for;
-            $config['data']['search_mongodb']['search']['touristic']['departure_offset_to'] = 730;
             $config['data']['media_types'] = $media_types;
             $config['data']['media_types_pretty_url'] = $media_types_pretty_url;
             $config['data']['media_types_allowed_visibilities'] = $media_types_allowed_visibilities;

@@ -619,3 +619,8 @@ define('TS_TOURISTIC_ORIGIN', 0);
  * you have to set the agency id here, see pm-config.php:data.touristic.agency_based_option_and_prices.allowed_agencies for valid ids
  */
 define('TS_AGENCY_ID_PRICE_INDEX', null);
+
+
+define('TS_AGENCY_DEFAULT_USER', 'TSAgency');
+define('TS_AGENCY_DEFAULT_USER_EMAIL', 'xxxx@example.de');
+define('TS_AGENCY_DEFAULT_USER_PW', null);

@@ -78,14 +78,15 @@ function add_frontend_user_roles(){
         }
     }
 
+
     if(defined('AGENCY_FUNCTIONALITY') && AGENCY_FUNCTIONALITY) {
         if(in_array('tsagency', $current_frontend_roles) === false) {
             add_role( 'tsagency', 'TSAgency', array( 'read' => true, 'level_0' => true, 'tt_frontend_user' => true) );
             $frontendroles .= "\nTSAgency";
             update_option('tt-user-frontend-roles',$frontendroles);
         }
-        if ( !username_exists('TSAgency') ) {
-            $userID = wp_create_user('TSAgency', 'CKX0JmnGsaiLjGAu$2w#xMj*BmvP$v', 'travelshop@pressmind.dev');
+        if ( !username_exists(TS_AGENCY_DEFAULT_USER) ) {
+            $userID = wp_create_user(TS_AGENCY_DEFAULT_USER, wp_generate_password(12, true, true), TS_AGENCY_DEFAULT_USER_EMAIL);
             $user = get_user_by( 'ID', $userID );
             $user->remove_role( 'subscriber' );
             $user->add_role( 'tsagency' );
@@ -186,8 +187,8 @@ function save_page( $post_ID )
 }
 
 add_action('admin_menu', 'admin_menu', 99);
-add_action( 'admin_init', 'register_settings' );
-add_action( 'admin_init', 'add_frontend_user_roles' );
+add_action('admin_init', 'register_settings');
+add_action('admin_init', 'add_frontend_user_roles');
 add_action('add_meta_boxes', 'add_meta_description');
 add_action('save_post', 'save_page');
 

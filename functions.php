@@ -43,7 +43,8 @@ require_once 'bootstrap.php';
 require_once 'admin-settings/register-settings-page.php';
 
 // User Settings / Travelshop
-require_once 'functions/usersettings.php';
+//require_once 'functions/usersettings.php';
+require_once 'functions/user_reset_link.php';
 
 // admin/system related functions
 require_once 'src/ThemeActivation.php';
